@@ -1,25 +1,26 @@
 {
   "name": "are_you_single_app",
   "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "exit 0"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
   },
-  "files": [
-    "template",
-    "template.config.js"
-  ],
-  "keywords": [
-    "react-native",
-    "typescript",
-    "jest",
-    "template",
-    "boilerplate"
-  ],
-  "author": "Emin Khateeb <emin@emin.ch>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/emin93/react-native-template-typescript/issues"
+  "dependencies": {
+    "expo": "~46.0.13",
+    "expo-status-bar": "~1.4.0",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-native": "0.69.6",
+    "react-native-web": "~0.18.7"
   },
-  "homepage": "https://github.com/emin93/react-native-template-typescript#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@types/react": "~18.0.14",
+    "@types/react-native": "~0.69.1",
+    "typescript": "~4.3.5"
+  },
   "private": true
 }
