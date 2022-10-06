@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.7.1",
+    "@types/react-native-sqlite-storage": "^5.0.2",
     "expo": "~46.0.13",
     "expo-status-bar": "~1.4.0",
     "formik": "^2.2.9",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.6",
+    "react-native-sqlite-storage": "^6.0.1",
     "react-native-web": "~0.18.7"
   },
   "devDependencies": {
