@@ -18,6 +18,11 @@ import {
   createTable,
   deleteRow
 } from "./db/database-helpers";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "./components/Home";
+import { AskForNumber } from "./components/AskForNumber";
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   const isDarkMode = useColorScheme() === "dark";
@@ -65,62 +70,41 @@ const App = () => {
     loadDataCallback();
   }, [loadDataCallback]);
 
-  const addTodo = async () => {
-    if (!newTodo.trim()) return;
-    try {
-      const newTodos = [
-        ...todos,
-        {
-          id: todos.length
-            ? todos.reduce((acc, cur) => {
-                if (cur.id > acc.id) return cur;
-                return acc;
-              }).id + 1
-            : 0,
-          value: newTodo
-        }
-      ];
-      setTodos(newTodos);
-      const db = await getDBConnection();
-      await saveTodoItems(db, newTodos);
-      setNewTodo("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const addTodo = async () => {
+  //   if (!newTodo.trim()) return;
+  //   try {
+  //     const newTodos = [
+  //       ...todos,
+  //       {
+  //         id: todos.length
+  //           ? todos.reduce((acc, cur) => {
+  //               if (cur.id > acc.id) return cur;
+  //               return acc;
+  //             }).id + 1
+  //           : 0,
+  //         value: newTodo
+  //       }
+  //     ];
+  //     setTodos(newTodos);
+  //     const db = await getDBConnection();
+  //     await saveTodoItems(db, newTodos);
+  //     setNewTodo("");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
-    <SafeAreaView>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View style={[styles.appTitleView]}>
-          <Text style={styles.appTitleText}> To Do Application </Text>
-        </View>
-        {/* <View>
-          {todos.map((todo) => (
-            <ToDoItemComponent
-              key={todo.id}
-              todo={todo}
-              deleteItem={deleteItem}
-            />
-          ))}
-        </View> */}
-        <View style={styles.textInputContainer}>
-          <Text> What's your name? </Text>
-          <TextInput
-            style={styles.textInput}
-            value={user.name}
-            onChangeText={(text) => setUser({ ...user, name: text })}
-          />
-          <Button
-            onPress={addTodo}
-            title="Next"
-            color="#841584"
-            accessibilityLabel="next button to continue on with the questions"
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ title: "Welcome" }}
+        />
+        <Stack.Screen name="Step1 - Ask for number" component={AskForNumber} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 const styles = StyleSheet.create({
