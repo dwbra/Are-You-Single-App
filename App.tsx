@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, createContext } from "react";
 import {
   Button,
   SafeAreaView,
@@ -21,11 +21,14 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./components/Home";
-import { AskForNumber } from "./components/AskForNumber";
+import FirstStep from "./components/Form/FirstStep";
+import Stepper from "./components/Stepper";
+
 const Stack = createNativeStackNavigator();
+// export const DarkMode = createContext(false);
 
 const App = () => {
-  const isDarkMode = useColorScheme() === "dark";
+  // const isDarkMode = useColorScheme() === "dark";
 
   const [user, setUser] = useState({
     name: "",
@@ -95,6 +98,7 @@ const App = () => {
   // };
 
   return (
+    // <DarkMode.Provider value={{ isDarkMode }}>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
@@ -102,36 +106,37 @@ const App = () => {
           component={Home}
           options={{ title: "Welcome" }}
         />
-        <Stack.Screen name="Step1 - Ask for number" component={AskForNumber} />
+        <Stack.Screen name="FirstStep" component={FirstStep} />
       </Stack.Navigator>
     </NavigationContainer>
+    // </DarkMode.Provider>
   );
 };
-const styles = StyleSheet.create({
-  appTitleView: {
-    marginTop: 20,
-    justifyContent: "center",
-    flexDirection: "row"
-  },
-  appTitleText: {
-    fontSize: 24,
-    fontWeight: "800"
-  },
-  textInputContainer: {
-    marginTop: 30,
-    marginLeft: 20,
-    marginRight: 20,
-    borderRadius: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    justifyContent: "flex-end"
-  },
-  textInput: {
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 30,
-    margin: 10,
-    backgroundColor: "pink"
-  }
-});
+// const styles = StyleSheet.create({
+//   appTitleView: {
+//     marginTop: 20,
+//     justifyContent: "center",
+//     flexDirection: "row"
+//   },
+//   appTitleText: {
+//     fontSize: 24,
+//     fontWeight: "800"
+//   },
+//   textInputContainer: {
+//     marginTop: 30,
+//     marginLeft: 20,
+//     marginRight: 20,
+//     borderRadius: 10,
+//     borderColor: "black",
+//     borderWidth: 1,
+//     justifyContent: "flex-end"
+//   },
+//   textInput: {
+//     borderWidth: 1,
+//     borderRadius: 5,
+//     height: 30,
+//     margin: 10,
+//     backgroundColor: "pink"
+//   }
+// });
 export default App;

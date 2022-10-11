@@ -2,11 +2,11 @@ import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 // import { ToDoItem } from "../type-models";
 
-export const AskForNumber = ({ name }) => {
+const FirstStep = () => {
   return (
     <View style={styles.todoContainer}>
       <View style={styles.todoTextContainer}>
-        <Text style={styles.sectionTitle}>{name}</Text>
+        <Text style={styles.sectionTitle}>{"this is a test"}</Text>
       </View>
       <Button
         // onPress={() => deleteItem(id)}
@@ -44,3 +44,5 @@ const styles = StyleSheet.create({
     fontWeight: "400"
   }
 });
+
+export default FirstStep;
