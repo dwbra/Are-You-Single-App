@@ -2,11 +2,11 @@ import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 // import { ToDoItem } from "../type-models";
 
-const FirstStep = () => {
+const ThirdStep = () => {
   return (
     <View style={styles.todoContainer}>
       <View style={styles.todoTextContainer}>
-        <Text style={styles.sectionTitle}>{"FIRST STEP"}</Text>
+        <Text style={styles.sectionTitle}>{"THIRD STEP"}</Text>
       </View>
       <Button
         // onPress={() => deleteItem(id)}
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FirstStep;
+export default ThirdStep;

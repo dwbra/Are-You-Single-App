@@ -10,106 +10,68 @@ import {
   useColorScheme,
   View
 } from "react-native";
-import { UserType, AdminType } from "./type-models";
-import {
-  getDBConnection,
-  getData,
-  saveData,
-  createTable,
-  deleteRow
-} from "./db/database-helpers";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "./components/Home";
-import FirstStep from "./components/Form/FirstStep";
+// import {
+//   getDBConnection,
+//   // getData,
+//   saveData,
+//   createTable,
+//   deleteRow
+// } from "./db/database-helpers";
+// import { NavigationContainer } from "@react-navigation/native";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Form from "./components/Form/Form";
 import Stepper from "./components/Stepper";
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 // export const DarkMode = createContext(false);
+
+export const FormContext = createContext({});
 
 const App = () => {
   // const isDarkMode = useColorScheme() === "dark";
+  const [activeStepIndex, setActiveStepIndex] = useState<any>(0);
+  const [formData, setFormData] = useState<any>({});
 
-  const [user, setUser] = useState({
-    name: "",
-    number: ""
-  });
+  // const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
+  // const [userDataStore, setUserDataStore] = useState<[] | any>([]);
 
-  const [admin, setAdmin] = useState({
-    name: "",
-    age: ""
-  });
-
-  const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
-  const [userDataStore, setUserDataStore] = useState<[] | any>([]);
-
-  const loadDataCallback = useCallback(async () => {
-    try {
-      const db = await getDBConnection();
-      const adminTable = await createTable(db, "admin-data");
-      const userTable = await createTable(db, "user-data");
-
-      const adminData = await getData(db, "admin-data");
-      const userData = await getData(db, "user-data");
-
-      if (adminData.length) {
-        //concating new arrays into the adminDataStore using spread operator
-        //https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array
-        setAdminDataStore({
-          adminDataStore: [...adminDataStore, adminData]
-        });
-      }
-
-      if (userData.length) {
-        setUserDataStore({ userDataStore: [...userDataStore, userData] });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  //on app startup create db tables if required and then grab admin and user data
-  useEffect(() => {
-    loadDataCallback();
-  }, [loadDataCallback]);
-
-  // const addTodo = async () => {
-  //   if (!newTodo.trim()) return;
+  // const loadDataCallback = useCallback(async () => {
   //   try {
-  //     const newTodos = [
-  //       ...todos,
-  //       {
-  //         id: todos.length
-  //           ? todos.reduce((acc, cur) => {
-  //               if (cur.id > acc.id) return cur;
-  //               return acc;
-  //             }).id + 1
-  //           : 0,
-  //         value: newTodo
-  //       }
-  //     ];
-  //     setTodos(newTodos);
   //     const db = await getDBConnection();
-  //     await saveTodoItems(db, newTodos);
-  //     setNewTodo("");
+  //     const adminTable = await createTable(db, "admin-data");
+  //     const userTable = await createTable(db, "user-data");
+
+  //     // const adminData = await getData(db, "admin-data");
+  //     // const userData = await getData(db, "user-data");
+
+  //     // if (adminData.length) {
+  //     //   //concating new arrays into the adminDataStore using spread operator
+  //     //   //https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array
+  //     //   setAdminDataStore({
+  //     //     adminDataStore: [...adminDataStore, adminData]
+  //     //   });
+  //     // }
+
+  //     // if (userData.length) {
+  //     //   setUserDataStore({ userDataStore: [...userDataStore, userData] });
+  //     // }
   //   } catch (error) {
   //     console.error(error);
   //   }
-  // };
+  // }, []);
+
+  // //on app startup create db tables if required and then grab admin and user data
+  // useEffect(() => {
+  //   loadDataCallback();
+  // }, [loadDataCallback]);
 
   return (
-    // <DarkMode.Provider value={{ isDarkMode }}>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ title: "Welcome" }}
-        />
-        <Stack.Screen name="FirstStep" component={FirstStep} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    // </DarkMode.Provider>
+    <FormContext.Provider
+      value={{ activeStepIndex, setActiveStepIndex, formData, setFormData }}
+    >
+      <Stepper />
+      <Form />
+    </FormContext.Provider>
   );
 };
 // const styles = StyleSheet.create({
