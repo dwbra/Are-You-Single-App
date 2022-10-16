@@ -10,19 +10,13 @@ import {
   useColorScheme,
   View
 } from "react-native";
-// import {
-//   getDBConnection,
-//   // getData,
-//   saveData,
-//   createTable,
-//   deleteRow
-// } from "./db/database-helpers";
 // import { NavigationContainer } from "@react-navigation/native";
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Form from "./components/Form/Form";
 import Stepper from "./components/Stepper";
+import { dbLoad, createAdmin } from "./db/database-helpers";
 
-// const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator()
 // export const DarkMode = createContext(false);
 
 export const FormContext = createContext({});
@@ -35,35 +29,44 @@ const App = () => {
   // const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
   // const [userDataStore, setUserDataStore] = useState<[] | any>([]);
 
-  // const loadDataCallback = useCallback(async () => {
-  //   try {
-  //     const db = await getDBConnection();
-  //     const adminTable = await createTable(db, "admin-data");
-  //     const userTable = await createTable(db, "user-data");
-
-  //     // const adminData = await getData(db, "admin-data");
-  //     // const userData = await getData(db, "user-data");
-
-  //     // if (adminData.length) {
-  //     //   //concating new arrays into the adminDataStore using spread operator
-  //     //   //https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array
-  //     //   setAdminDataStore({
-  //     //     adminDataStore: [...adminDataStore, adminData]
-  //     //   });
-  //     // }
-
-  //     // if (userData.length) {
-  //     //   setUserDataStore({ userDataStore: [...userDataStore, userData] });
-  //     // }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }, []);
+  const loadDataCallback = useCallback(async () => {
+    try {
+      // const db = await getDBConnection();
+      // // console.log(db);
+      // // const TEST = await testCallback(db);
+      // const adminTable = await createAdminTable(db);
+      // // const adminTable = await createUserTable(db, "user-data");
+      // console.log(adminTable);
+      // const createAdminUser = await saveAdminData(db);
+      // console.log(createAdminUser);
+      // // const userTable = await createTable(db, "user-data");
+      // const adminData = await getAdminData(db);
+      // console.log(adminData);
+      // const userData = await getData(db, "user-data");
+      // if (adminData.length) {
+      //   //concating new arrays into the adminDataStore using spread operator
+      //   //https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array
+      //   setAdminDataStore({
+      //     adminDataStore: [...adminDataStore, adminData]
+      //   });
+      // }
+      // if (userData.length) {
+      //   setUserDataStore({ userDataStore: [...userDataStore, userData] });
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   // //on app startup create db tables if required and then grab admin and user data
-  // useEffect(() => {
-  //   loadDataCallback();
-  // }, [loadDataCallback]);
+  useEffect(() => {
+    loadDataCallback();
+    dbLoad();
+    createAdmin();
+
+    // createUser();
+    // getData();
+  }, []);
 
   return (
     <FormContext.Provider

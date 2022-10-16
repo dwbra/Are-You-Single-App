@@ -1,25 +1,112 @@
-// import {
-//   enablePromise,
-//   openDatabase,
-//   SQLiteDatabase
-// } from "react-native-sqlite-storage";
-// import { UserType, AdminType } from "../type-models";
-// enablePromise(true);
+import * as SQLite from "expo-sqlite";
+import { boolean } from "yup";
+import { UserType, AdminType } from "../type-models";
 
 // // const tableName = "user-data";
 
 // export const getDBConnection = async () => {
-//   return openDatabase({ name: "single-app-data.db", location: "default" });
+//   return SQLite.openDatabase("aysa");
 // };
 
-// export const createTable = async (db: SQLiteDatabase, tableName: string) => {
-//   // create table if not exists
-//   const query = `CREATE TABLE IF NOT EXISTS ${tableName}(
-//         value TEXT NOT NULL
-//     );`;
+console.log("FUCKING DATABASE HELPERS ARE LOADING CUNT!");
 
-//   await db.executeSql(query);
+const db = SQLite.openDatabase("aysa");
+// console.log(db);
+
+export const dbLoad = async () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "create table if not exists adminData (id integer primary key autoincrement, name text not null, age int not null);",
+      null!,
+      (_, results) => {
+        const { insertId, rows, rowsAffected } = results;
+        console.log("adminData table created as " + insertId);
+      },
+      (_, error): boolean => {
+        console.warn(error);
+        return false;
+      }
+    );
+  });
+  db.transaction((tx) => {
+    tx.executeSql(
+      "create table if not exists userData (id integer primary key autoincrement, name text not null, number int not null);",
+      null!,
+      (_, results) => {
+        const { insertId, rows, rowsAffected } = results;
+        console.log("userData table created as " + insertId);
+      },
+      (_, error): boolean => {
+        console.warn(error);
+        return false;
+      }
+    );
+  });
+};
+
+export const createAdmin = async () => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "insert into adminData (name, age) values (?,?)",
+      ["daniel", "30"],
+      (_, results) => {
+        console.log("admin user is created " + results.rows);
+      },
+      (_, error): boolean => {
+        console.warn(error);
+        return false;
+      }
+    );
+  });
+};
+
+// export const getData = async () => {
+//   let data: any[] = [];
+//   db.transaction((tx) => {
+//     tx.executeSql("select * from admin-data", [], (_, { rows }) =>
+//       console.log(JSON.stringify(rows))
+//     );
+//     tx.executeSql("select * from user-data", [], (_, { rows: { _array } }) =>
+//       data.push(_array)
+//     );
+//   });
+
+//   console.log(data);
 // };
+
+// export const createAdminTable = async () => {
+//   return new Promise((resolve) => {
+//     db.transaction((tx: any) => {
+//       tx.executeSql(
+//         "create table if not exists admin-data (id integer primary key autoincrement, name text not null, age int not null);",
+//         (_: any, result: any) => {
+//           resolve(result);
+//           console.log("promise resolved");
+//         },
+//         (_: any, error: any): boolean => {
+//           console.warn(error);
+//           resolve([]);
+//           return false;
+//         }
+//       );
+//     });
+//   });
+// };
+// createAdminTable();
+
+// export const createAdminTable = async () => {
+//   db.transaction(
+//     (tx: any) => {
+//       tx.executeSql(
+//         "create table if not exists admin-data (id integer primary key autoincrement, name text not null, age int not null);"
+//       );
+//     },
+//     (error: any) => {
+//       console.log(error);
+//     }
+//   );
+// };
+// createAdminTable();
 
 // export const getData = async (db: SQLiteDatabase, tableName: string) => {
 //   try {
@@ -46,25 +133,29 @@
 //   }
 // };
 
-// export const saveData = async (
-//   db: SQLiteDatabase,
-//   tableName: string,
-//   user: UserType[],
-//   admin: AdminType[]
-// ) => {
-//   if (tableName === "user-data") {
-//     const userData = user || [];
-//     const insertQuery =
-//       `INSERT OR REPLACE INTO ${tableName}(rowid, value) values` +
-//       userData.map((i) => `(${i.id}, '${i.name}')`).join(",");
-//     return db.executeSql(insertQuery);
-//   } else {
-//     const adminData = admin || [];
-//     const insertQuery =
-//       `INSERT OR REPLACE INTO ${tableName}(rowid, value) values` +
-//       adminData.map((i) => `(${i.id}, '${i.name}')`).join(",");
-//     return db.executeSql(insertQuery);
-//   }
+// export const saveAdminData = async (db: any) => {
+//   db.transaction((tx: any) => {
+//     tx.executeSql(
+//       "INSERT INTO admin-data (name, age) values (?, ?)",
+//       ["gibberish", 0],
+//       (txObj: any, resultSet: any) => console.log(resultSet),
+//       (txObj: any, error: any) => console.log("Error", error)
+//     );
+//   });
+// };
+
+// export const getAdminData = async (db: any) => {
+//   db.transaction((tx: any) => {
+//     // sending 4 arguments in executeSql
+//     tx.executeSql(
+//       "SELECT * FROM admin-data",
+//       null, // passing sql query and parameters:null
+//       // success callback which sends two things Transaction object and ResultSet Object
+//       (txObj: any, resultSet: any) => console.log(resultSet),
+//       // failure callback which sends two things Transaction object and Error
+//       (txObj: any, error: any) => console.log("Error ", error)
+//     ); // end executeSQL
+//   }); // end transaction
 // };
 
 // export const deleteRow = async (
@@ -74,10 +165,4 @@
 // ) => {
 //   const deleteQuery = `DELETE from ${tableName} where rowid = ${id}`;
 //   await db.executeSql(deleteQuery);
-// };
-
-// export const deleteTable = async (db: SQLiteDatabase, tableName: string) => {
-//   const query = `drop table ${tableName}`;
-
-//   await db.executeSql(query);
 // };
