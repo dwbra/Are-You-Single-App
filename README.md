@@ -9,4 +9,5 @@ I thought that it would be a great opportunity to build my first React Native ap
 #### Resources
 
 - https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-
--
+- https://stackoverflow.com/questions/66587537/how-to-use-expo-sqlite-execute-sql-with-typescript
+- https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array

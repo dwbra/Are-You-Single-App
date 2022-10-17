@@ -14,7 +14,7 @@ import {
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Form from "./components/Form/Form";
 import Stepper from "./components/Stepper";
-import { dbLoad, createAdmin } from "./db/database-helpers";
+import { dbLoad, getAdminData } from "./db/database-helpers";
 
 // const Stack = createNativeStackNavigator()
 // export const DarkMode = createContext(false);
@@ -26,33 +26,23 @@ const App = () => {
   const [activeStepIndex, setActiveStepIndex] = useState<any>(0);
   const [formData, setFormData] = useState<any>({});
 
-  // const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
+  const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
   // const [userDataStore, setUserDataStore] = useState<[] | any>([]);
 
   const loadDataCallback = useCallback(async () => {
     try {
-      // const db = await getDBConnection();
-      // // console.log(db);
-      // // const TEST = await testCallback(db);
-      // const adminTable = await createAdminTable(db);
-      // // const adminTable = await createUserTable(db, "user-data");
-      // console.log(adminTable);
-      // const createAdminUser = await saveAdminData(db);
-      // console.log(createAdminUser);
-      // // const userTable = await createTable(db, "user-data");
-      // const adminData = await getAdminData(db);
-      // console.log(adminData);
-      // const userData = await getData(db, "user-data");
-      // if (adminData.length) {
-      //   //concating new arrays into the adminDataStore using spread operator
-      //   //https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array
-      //   setAdminDataStore({
-      //     adminDataStore: [...adminDataStore, adminData]
-      //   });
-      // }
-      // if (userData.length) {
-      //   setUserDataStore({ userDataStore: [...userDataStore, userData] });
-      // }
+      await dbLoad();
+      const adminData: {} = (await getAdminData()) as {};
+      // console.log(adminData._array);
+      // @ts-ignore
+      if (adminData.length) {
+        //concating new arrays into the adminDataStore using spread operator
+        setAdminDataStore({
+          // using three dot spread on the data object to destructure the objects
+          // @ts-ignore
+          adminDataStore: [...adminDataStore, ...adminData._array]
+        });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -61,12 +51,9 @@ const App = () => {
   // //on app startup create db tables if required and then grab admin and user data
   useEffect(() => {
     loadDataCallback();
-    dbLoad();
-    createAdmin();
+  }, [loadDataCallback]);
 
-    // createUser();
-    // getData();
-  }, []);
+  console.log(adminDataStore);
 
   return (
     <FormContext.Provider
