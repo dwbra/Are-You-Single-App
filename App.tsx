@@ -1,20 +1,107 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState, createContext } from "react";
+import {
+  Button,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  useColorScheme,
+  View
+} from "react-native";
+// import { NavigationContainer } from "@react-navigation/native";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Form from "./components/Form/Form";
+import Stepper from "./components/Stepper";
+import {
+  dbLoad,
+  getAdminData,
+  deleteAdmin,
+  updateAdmin
+} from "./db/database-helpers";
 
-export default function App() {
+// const Stack = createNativeStackNavigator()
+// export const DarkMode = createContext(false);
+
+export const FormContext = createContext({});
+
+const App = () => {
+  // const isDarkMode = useColorScheme() === "dark";
+  const [activeStepIndex, setActiveStepIndex] = useState<any>(0);
+  const [formData, setFormData] = useState<any>({});
+
+  const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
+  const [userDataStore, setUserDataStore] = useState<[] | any>([]);
+
+  const loadDataCallback = useCallback(async () => {
+    try {
+      await dbLoad();
+      const adminData: {} = (await getAdminData()) as {};
+      // @ts-ignore
+      if (adminData.length) {
+        setAdminDataStore({
+          //concating new arrays into the adminDataStore using spread operator
+          // using three dot spread on the data object to destructure the objects
+          // @ts-ignore
+          adminDataStore: [...adminDataStore, ...adminData._array]
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  //on app startup create db tables if required and then grab admin data
+  useEffect(() => {
+    loadDataCallback();
+  }, [loadDataCallback]);
+
+  console.log(adminDataStore);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <FormContext.Provider
+      value={{
+        activeStepIndex,
+        setActiveStepIndex,
+        formData,
+        setFormData,
+        adminDataStore,
+        setAdminDataStore,
+        userDataStore,
+        setUserDataStore
+      }}
+    >
+      <Stepper />
+      <Form />
+    </FormContext.Provider>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};
+// const styles = StyleSheet.create({
+//   appTitleView: {
+//     marginTop: 20,
+//     justifyContent: "center",
+//     flexDirection: "row"
+//   },
+//   appTitleText: {
+//     fontSize: 24,
+//     fontWeight: "800"
+//   },
+//   textInputContainer: {
+//     marginTop: 30,
+//     marginLeft: 20,
+//     marginRight: 20,
+//     borderRadius: 10,
+//     borderColor: "black",
+//     borderWidth: 1,
+//     justifyContent: "flex-end"
+//   },
+//   textInput: {
+//     borderWidth: 1,
+//     borderRadius: 5,
+//     height: 30,
+//     margin: 10,
+//     backgroundColor: "pink"
+//   }
+// });
+export default App;
