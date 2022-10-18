@@ -81,7 +81,12 @@ export const createAdmin = async (name: string, age: number) => {
         [name, age],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
-          resolve("admin data saved at " + rowsAffected);
+          resolve({
+            status: "adminData saved",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId
+          });
         },
         (_, error): boolean => {
           console.warn(error);
@@ -92,22 +97,50 @@ export const createAdmin = async (name: string, age: number) => {
   });
 };
 
-// export const updateAdminData = async (db: any) => {
-//   db.transaction((tx: any) => {
-//     tx.executeSql(
-//       "INSERT INTO admin-data (name, age) values (?, ?)",
-//       ["gibberish", 0],
-//       (txObj: any, resultSet: any) => console.log(resultSet),
-//       (txObj: any, error: any) => console.log("Error", error)
-//     );
-//   });
-// };
+export const updateAdmin = async (id: number, name: string, age: number) => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "update adminData set name = ?, age = ? where id = ?",
+        [name, age, id],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            status: "admin updated",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};
 
-// export const deleteRow = async (
-//   db: SQLiteDatabase,
-//   tableName: string,
-//   id: number
-// ) => {
-//   const deleteQuery = `DELETE from ${tableName} where rowid = ${id}`;
-//   await db.executeSql(deleteQuery);
-// };
+export const deleteAdmin = async (id: number) => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `delete from adminData where id = ${id};`,
+        [id],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            status: "admin deleted",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};

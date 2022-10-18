@@ -14,7 +14,12 @@ import {
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Form from "./components/Form/Form";
 import Stepper from "./components/Stepper";
-import { dbLoad, getAdminData } from "./db/database-helpers";
+import {
+  dbLoad,
+  getAdminData,
+  deleteAdmin,
+  updateAdmin
+} from "./db/database-helpers";
 
 // const Stack = createNativeStackNavigator()
 // export const DarkMode = createContext(false);
@@ -27,17 +32,16 @@ const App = () => {
   const [formData, setFormData] = useState<any>({});
 
   const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
-  // const [userDataStore, setUserDataStore] = useState<[] | any>([]);
+  const [userDataStore, setUserDataStore] = useState<[] | any>([]);
 
   const loadDataCallback = useCallback(async () => {
     try {
       await dbLoad();
       const adminData: {} = (await getAdminData()) as {};
-      // console.log(adminData._array);
       // @ts-ignore
       if (adminData.length) {
-        //concating new arrays into the adminDataStore using spread operator
         setAdminDataStore({
+          //concating new arrays into the adminDataStore using spread operator
           // using three dot spread on the data object to destructure the objects
           // @ts-ignore
           adminDataStore: [...adminDataStore, ...adminData._array]
@@ -48,7 +52,7 @@ const App = () => {
     }
   }, []);
 
-  // //on app startup create db tables if required and then grab admin and user data
+  //on app startup create db tables if required and then grab admin data
   useEffect(() => {
     loadDataCallback();
   }, [loadDataCallback]);
@@ -57,7 +61,16 @@ const App = () => {
 
   return (
     <FormContext.Provider
-      value={{ activeStepIndex, setActiveStepIndex, formData, setFormData }}
+      value={{
+        activeStepIndex,
+        setActiveStepIndex,
+        formData,
+        setFormData,
+        adminDataStore,
+        setAdminDataStore,
+        userDataStore,
+        setUserDataStore
+      }}
     >
       <Stepper />
       <Form />
