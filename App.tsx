@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState, createContext } from "react";
+import { Provider as PaperProvider } from "react-native-paper";
 import {
   Button,
   SafeAreaView,
@@ -72,8 +73,10 @@ const App = () => {
         setUserDataStore
       }}
     >
-      <Stepper />
-      <Form />
+      <PaperProvider>
+        <Stepper />
+        <Form />
+      </PaperProvider>
     </FormContext.Provider>
   );
 };
