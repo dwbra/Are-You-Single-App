@@ -10,7 +10,7 @@ import {
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FormContext } from "../../App";
 import * as yup from "yup";
-import { Button as PaperButton } from "react-native-paper";
+import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 
 const FirstStep = () => {
   // @ts-ignore
@@ -36,7 +36,11 @@ const FirstStep = () => {
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values }) => (
-        <View>
+        <View style={styles.container}>
+          <PaperText variant="bodyLarge">
+            Hey, usually I'd ask you this in person, but what's your name? My
+            names
+          </PaperText>
           <TextInput
             style={styles.input}
             placeholder="your name"
@@ -44,51 +48,14 @@ const FirstStep = () => {
             onBlur={handleBlur("name")}
             value={values.name}
           />
-          <Button onPress={handleSubmit} title="continue" />
+          <PaperButton mode="contained" onPress={handleSubmit}>
+            Continue
+          </PaperButton>
         </View>
       )}
     </Formik>
   );
 };
-
-// <View style={styles.todoContainer}>
-//   <View style={styles.todoTextContainer}>
-//     <Text style={styles.sectionTitle}>{"FIRST STEP"}</Text>
-//   </View>
-//   <Button
-//     // onPress={() => deleteItem(id)}
-//     title="Yes"
-//     color="#841584"
-//     accessibilityLabel="yes"
-//   />
-//   <Button
-//     // onPress={() => deleteItem(id)}
-//     title="No"
-//     color="#841584"
-//     accessibilityLabel="no"
-//   />
-// </View>
-
-// const styles = StyleSheet.create({
-//   todoContainer: {
-//     marginTop: 10,
-//     paddingHorizontal: 24,
-//     backgroundColor: "deepskyblue",
-//     marginLeft: 20,
-//     marginRight: 20,
-//     borderRadius: 10,
-//     borderColor: "black",
-//     borderWidth: 1
-//   },
-//   todoTextContainer: {
-//     justifyContent: "center",
-//     flexDirection: "row"
-//   },
-//   sectionTitle: {
-//     fontSize: 20,
-//     fontWeight: "400"
-//   }
-// });
 
 const styles = StyleSheet.create({
   errorContainer: {
@@ -98,14 +65,12 @@ const styles = StyleSheet.create({
     color: "red"
   },
   container: {
-    flex: 1,
     alignItems: "center",
-    marginTop: 40
+    marginTop: 20
   },
   input: {
     marginVertical: 10,
     width: Dimensions.get("window").width - 100,
-
     height: 40,
     borderWidth: 1,
     padding: 10,
