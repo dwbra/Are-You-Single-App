@@ -30,7 +30,7 @@ const FirstStep = () => {
 
   // console.log(adminName);
 
-  const renderError = (message: any) => <Text>{message}</Text>;
+  // const renderError = (message: any) => <Text>{message}</Text>;
 
   const ValidationSchema = yup.object().shape({
     name: yup.string().required()
