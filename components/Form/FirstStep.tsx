@@ -13,9 +13,22 @@ import * as yup from "yup";
 import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 
 const FirstStep = () => {
-  // @ts-ignore
-  const { activeStepIndex, setActiveStepIndex, formData, setFormData } =
-    useContext(FormContext);
+  const {
+    // @ts-ignore
+    activeStepIndex,
+    // @ts-ignore
+    setActiveStepIndex,
+    // @ts-ignore
+    formData,
+    // @ts-ignore
+    setFormData,
+    // @ts-ignore
+    adminDataStore
+  } = useContext(FormContext);
+
+  const adminName = adminDataStore[0]?.name;
+
+  // console.log(adminName);
 
   const renderError = (message: any) => <Text>{message}</Text>;
 
@@ -37,9 +50,11 @@ const FirstStep = () => {
     >
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View style={styles.container}>
-          <PaperText variant="bodyLarge">
-            Hey, usually I'd ask you this in person, but what's your name? My
-            names
+          <PaperText variant="bodyLarge" style={styles.text}>
+            <>
+              Hey, usually I'd ask you this in person, but what's your name? My
+              names {adminName}.
+            </>
           </PaperText>
           <TextInput
             style={styles.input}
@@ -58,6 +73,9 @@ const FirstStep = () => {
 };
 
 const styles = StyleSheet.create({
+  text: {
+    width: Dimensions.get("window").width - 50
+  },
   errorContainer: {
     marginVertical: 5
   },
@@ -70,7 +88,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginVertical: 10,
-    width: Dimensions.get("window").width - 100,
+    width: Dimensions.get("window").width - 50,
     height: 40,
     borderWidth: 1,
     padding: 10,

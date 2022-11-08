@@ -41,12 +41,12 @@ const App = () => {
       const adminData: {} = (await getAdminData()) as {};
       // @ts-ignore
       if (adminData.length) {
-        setAdminDataStore({
+        setAdminDataStore(
           //concating new arrays into the adminDataStore using spread operator
           // using three dot spread on the data object to destructure the objects
           // @ts-ignore
-          adminDataStore: [...adminDataStore, ...adminData._array]
-        });
+          [...adminDataStore, ...adminData._array]
+        );
       }
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ const App = () => {
     loadDataCallback();
   }, [loadDataCallback]);
 
-  console.log(adminDataStore);
+  // console.log(adminDataStore);
 
   return (
     <FormContext.Provider
