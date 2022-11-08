@@ -6,6 +6,11 @@ I came up with this idea whilst on a flight with an attractive air hostest. I wa
 
 I thought that it would be a great opportunity to build my first React Native application using Formik to create a multistep form.
 
+#### Build/Run steps
+
+1. Run npm i
+2. Run npm run ios
+
 #### Resources
 
 - https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-

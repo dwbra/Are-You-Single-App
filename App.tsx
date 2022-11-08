@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState, createContext } from "react";
+import { Provider as PaperProvider } from "react-native-paper";
 import {
   Button,
   SafeAreaView,
@@ -40,12 +41,12 @@ const App = () => {
       const adminData: {} = (await getAdminData()) as {};
       // @ts-ignore
       if (adminData.length) {
-        setAdminDataStore({
+        setAdminDataStore(
           //concating new arrays into the adminDataStore using spread operator
           // using three dot spread on the data object to destructure the objects
           // @ts-ignore
-          adminDataStore: [...adminDataStore, ...adminData._array]
-        });
+          [...adminDataStore, ...adminData._array]
+        );
       }
     } catch (error) {
       console.error(error);
@@ -57,7 +58,7 @@ const App = () => {
     loadDataCallback();
   }, [loadDataCallback]);
 
-  console.log(adminDataStore);
+  // console.log(adminDataStore);
 
   return (
     <FormContext.Provider
@@ -72,8 +73,10 @@ const App = () => {
         setUserDataStore
       }}
     >
-      <Stepper />
-      <Form />
+      <PaperProvider>
+        <Stepper />
+        <Form />
+      </PaperProvider>
     </FormContext.Provider>
   );
 };
