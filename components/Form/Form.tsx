@@ -15,6 +15,7 @@ import {
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
+import Denied from "./Denied";
 // import { Basic, Success, Workspace } from "../Forms";
 
 function Form() {
@@ -30,6 +31,9 @@ function Form() {
       break;
     case 2:
       stepContent = <ThirdStep />;
+      break;
+    case 99:
+      stepContent = <Denied />;
       break;
     default:
       break;

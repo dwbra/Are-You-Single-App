@@ -1,47 +1,107 @@
-import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-// import { ToDoItem } from "../type-models";
+import React, { useContext } from "react";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Dimensions
+} from "react-native";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { FormContext } from "../../App";
+import * as yup from "yup";
+import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 
 const ThirdStep = () => {
-  return (
-    <View style={styles.todoContainer}>
-      <View style={styles.todoTextContainer}>
-        <Text style={styles.sectionTitle}>{"THIRD STEP"}</Text>
-      </View>
-      <Button
-        // onPress={() => deleteItem(id)}
-        title="Yes"
-        color="#841584"
-        accessibilityLabel="yes"
-      />
-      <Button
-        // onPress={() => deleteItem(id)}
-        title="No"
-        color="#841584"
-        accessibilityLabel="no"
-      />
+  const {
+    // @ts-ignore
+    activeStepIndex,
+    // @ts-ignore
+    setActiveStepIndex,
+    // @ts-ignore
+    formData,
+    // @ts-ignore
+    setFormData,
+    // @ts-ignore
+    adminDataStore
+  } = useContext(FormContext);
+
+  const adminName = adminDataStore[0]?.name;
+
+  const ValidationSchema = yup.object().shape({
+    name: yup.string().required()
+  });
+
+  // @ts-ignore
+  const ErrorMessage = ({ errorValue }) => (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText}>{errorValue}</Text>
     </View>
+  );
+
+  return (
+    <Formik
+      initialValues={{
+        name: ""
+      }}
+      validationSchema={ValidationSchema}
+      onSubmit={(values) => {
+        const data = { ...formData, ...values };
+        setFormData(data);
+        setActiveStepIndex(activeStepIndex + 1);
+      }}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        touched,
+        errors
+      }) => (
+        <View style={styles.container}>
+          <PaperText variant="bodyLarge" style={styles.text}>
+            <>Sick! You can chuck in your digits below.</>
+          </PaperText>
+          <TextInput
+            style={styles.input}
+            placeholder="your name"
+            onChangeText={handleChange("name")}
+            onBlur={handleBlur("name")}
+            value={values.name}
+          />
+          <ErrorMessage errorValue={touched.name && errors.name} />
+          <PaperButton mode="contained" onPress={handleSubmit}>
+            Continue
+          </PaperButton>
+        </View>
+      )}
+    </Formik>
   );
 };
 
 const styles = StyleSheet.create({
-  todoContainer: {
-    marginTop: 10,
-    paddingHorizontal: 24,
-    backgroundColor: "deepskyblue",
-    marginLeft: 20,
-    marginRight: 20,
-    borderRadius: 10,
-    borderColor: "black",
-    borderWidth: 1
+  text: {
+    width: Dimensions.get("window").width - 50
   },
-  todoTextContainer: {
-    justifyContent: "center",
-    flexDirection: "row"
+  errorContainer: {
+    marginVertical: 5,
+    marginBottom: 15
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "400"
+  errorText: {
+    color: "red"
+  },
+  container: {
+    alignItems: "center",
+    marginTop: 20
+  },
+  input: {
+    marginVertical: 10,
+    width: Dimensions.get("window").width - 50,
+    height: 40,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5
   }
 });
 
