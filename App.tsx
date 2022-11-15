@@ -21,6 +21,7 @@ import {
   deleteAdmin,
   updateAdmin
 } from "./db/database-helpers";
+import AdminBar from "./components/AdminBar";
 
 // const Stack = createNativeStackNavigator()
 
@@ -74,6 +75,7 @@ const App = () => {
       <PaperProvider>
         <Stepper />
         <Form />
+        <AdminBar />
       </PaperProvider>
     </FormContext.Provider>
   );
