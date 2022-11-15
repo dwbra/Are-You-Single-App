@@ -15,7 +15,8 @@ import {
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
-// import { Basic, Success, Workspace } from "../Forms";
+import Denied from "./Denied";
+import Success from "./Success";
 
 function Form() {
   // @ts-ignore
@@ -30,6 +31,12 @@ function Form() {
       break;
     case 2:
       stepContent = <ThirdStep />;
+      break;
+    case 99:
+      stepContent = <Denied />;
+      break;
+    case 69:
+      stepContent = <Success />;
       break;
     default:
       break;

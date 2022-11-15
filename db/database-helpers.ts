@@ -97,6 +97,30 @@ export const createAdmin = async (name: string, age: number) => {
   });
 };
 
+export const createUser = async (name: string, number: number) => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into userData (name, number) values (?,?)",
+        [name, number],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            status: "new user successfully created and saved",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};
+
 export const updateAdmin = async (id: number, name: string, age: number) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {

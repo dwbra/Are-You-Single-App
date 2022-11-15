@@ -23,12 +23,10 @@ import {
 } from "./db/database-helpers";
 
 // const Stack = createNativeStackNavigator()
-// export const DarkMode = createContext(false);
 
 export const FormContext = createContext({});
 
 const App = () => {
-  // const isDarkMode = useColorScheme() === "dark";
   const [activeStepIndex, setActiveStepIndex] = useState<any>(0);
   const [formData, setFormData] = useState<any>({});
 

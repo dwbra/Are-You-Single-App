@@ -28,13 +28,16 @@ const FirstStep = () => {
 
   const adminName = adminDataStore[0]?.name;
 
-  // console.log(adminName);
-
-  const renderError = (message: any) => <Text>{message}</Text>;
-
   const ValidationSchema = yup.object().shape({
     name: yup.string().required()
   });
+
+  // @ts-ignore
+  const ErrorMessage = ({ errorValue }) => (
+    <View style={styles.errorContainer}>
+      <Text style={styles.errorText}>{errorValue}</Text>
+    </View>
+  );
 
   return (
     <Formik
@@ -48,7 +51,14 @@ const FirstStep = () => {
         setActiveStepIndex(activeStepIndex + 1);
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        touched,
+        errors
+      }) => (
         <View style={styles.container}>
           <PaperText variant="bodyLarge" style={styles.text}>
             <>
@@ -66,6 +76,7 @@ const FirstStep = () => {
           <PaperButton mode="contained" onPress={handleSubmit}>
             Continue
           </PaperButton>
+          <ErrorMessage errorValue={touched.name && errors.name} />
         </View>
       )}
     </Formik>
@@ -77,7 +88,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 50
   },
   errorContainer: {
-    marginVertical: 5
+    marginTop: 15,
+    width: Dimensions.get("window").width - 50
   },
   errorText: {
     color: "red"
@@ -93,20 +105,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 5
-  },
-  buttonContainer: {
-    marginVertical: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    width: Dimensions.get("window").width - 200,
-    height: 44,
-    borderRadius: 5,
-    backgroundColor: "#343434"
-  },
-  buttonText: {
-    fontSize: 42,
-    color: "red"
   }
 });
 
