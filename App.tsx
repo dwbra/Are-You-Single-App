@@ -57,6 +57,10 @@ const App = () => {
     loadDataCallback();
   }, [loadDataCallback]);
 
+  // function updateName() {
+  //   updateAdmin(1, "Daniel", 30);
+  // }
+
   // console.log(adminDataStore);
 
   return (
