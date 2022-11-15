@@ -10,10 +10,12 @@ const Stepper = () => {
   //use a ternary to return the correct progression step based on context
   let progress =
     activeStepIndex === 0
-      ? 0.3
+      ? 0.25
       : activeStepIndex === 1
-      ? 0.6
+      ? 0.5
       : activeStepIndex === 2
+      ? 0.75
+      : activeStepIndex === 69
       ? 1
       : activeStepIndex === 99
       ? 1

@@ -26,10 +26,8 @@ const ThirdStep = () => {
     adminDataStore
   } = useContext(FormContext);
 
-  const adminName = adminDataStore[0]?.name;
-
   const ValidationSchema = yup.object().shape({
-    name: yup.string().required()
+    number: yup.number().required()
   });
 
   // @ts-ignore
@@ -42,13 +40,13 @@ const ThirdStep = () => {
   return (
     <Formik
       initialValues={{
-        name: ""
+        number: 0
       }}
       validationSchema={ValidationSchema}
       onSubmit={(values) => {
         const data = { ...formData, ...values };
         setFormData(data);
-        setActiveStepIndex(activeStepIndex + 1);
+        setActiveStepIndex(69);
       }}
     >
       {({
@@ -65,15 +63,18 @@ const ThirdStep = () => {
           </PaperText>
           <TextInput
             style={styles.input}
-            placeholder="your name"
-            onChangeText={handleChange("name")}
-            onBlur={handleBlur("name")}
-            value={values.name}
+            placeholder="your number"
+            keyboardType="numeric"
+            onChangeText={handleChange("number")}
+            onBlur={handleBlur("number")}
+            maxLength={10}
+            // @ts-ignore
+            value={values.number}
           />
-          <ErrorMessage errorValue={touched.name && errors.name} />
           <PaperButton mode="contained" onPress={handleSubmit}>
             Continue
           </PaperButton>
+          <ErrorMessage errorValue={touched.number && errors.number} />
         </View>
       )}
     </Formik>
@@ -85,8 +86,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 50
   },
   errorContainer: {
-    marginVertical: 5,
-    marginBottom: 15
+    marginTop: 15,
+    width: Dimensions.get("window").width - 50
   },
   errorText: {
     color: "red"

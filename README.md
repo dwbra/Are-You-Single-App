@@ -8,8 +8,12 @@ I thought that it would be a great opportunity to build my first React Native ap
 
 #### Build/Run steps
 
-1. Run npm i
-2. Run npm run ios
+1. npm i
+2. npm run serve
+
+Choose which device setup to run. Personally I used IOS with Xcode so
+
+3. i
 
 #### Resources
 

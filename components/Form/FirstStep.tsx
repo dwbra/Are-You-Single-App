@@ -73,10 +73,10 @@ const FirstStep = () => {
             onBlur={handleBlur("name")}
             value={values.name}
           />
-          <ErrorMessage errorValue={touched.name && errors.name} />
           <PaperButton mode="contained" onPress={handleSubmit}>
             Continue
           </PaperButton>
+          <ErrorMessage errorValue={touched.name && errors.name} />
         </View>
       )}
     </Formik>
@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 50
   },
   errorContainer: {
-    marginVertical: 5,
-    marginBottom: 15
+    marginTop: 15,
+    width: Dimensions.get("window").width - 50
   },
   errorText: {
     color: "red"
