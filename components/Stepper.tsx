@@ -7,7 +7,6 @@ const Stepper = () => {
   // @ts-ignore
   const { activeStepIndex } = useContext(FormContext);
 
-  //use a ternary to return the correct progression step based on context
   let progress =
     activeStepIndex === 0
       ? 0.25
