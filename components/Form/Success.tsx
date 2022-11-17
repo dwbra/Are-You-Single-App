@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Text as PaperText } from "react-native-paper";
+import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 import { FormContext } from "../../App";
 import { createUser } from "../../db/database-helpers";
 

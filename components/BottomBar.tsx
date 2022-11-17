@@ -2,6 +2,8 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AdminScreen from "./AdminScreen";
 import Form from "./Form/Form";
+import { StyleSheet } from "react-native";
+import React, { useEffect } from "react";
 
 const BottomNavBar = createMaterialBottomTabNavigator();
 
@@ -9,8 +11,10 @@ const BottomBar = () => {
   return (
     <BottomNavBar.Navigator
       initialRouteName="Form"
-      activeColor="#e91e63"
-      barStyle={{ backgroundColor: "tomato" }}
+      activeColor="#6200ee"
+      inactiveColor="grey"
+      shifting={true}
+      barStyle={{ backgroundColor: "#D3D3D3" }}
     >
       <BottomNavBar.Screen
         name="Form"
@@ -19,7 +23,7 @@ const BottomBar = () => {
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
-          )
+          ),
         }}
       />
       <BottomNavBar.Screen
@@ -29,7 +33,7 @@ const BottomBar = () => {
           tabBarLabel: "Numbers",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="cellphone" color={color} size={26} />
-          )
+          ),
         }}
       />
       <BottomNavBar.Screen
@@ -38,8 +42,8 @@ const BottomBar = () => {
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="cog" color={color} size={26} />
-          )
+            <MaterialCommunityIcons name="cog" color={color} size={30} />
+          ),
         }}
       />
     </BottomNavBar.Navigator>
