@@ -17,19 +17,19 @@ const Denied = () => {
 
 const styles = StyleSheet.create({
   text: {
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
   },
   container: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   buttonFlex: {
     width: Dimensions.get("window").width - 50,
     marginTop: 15,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-evenly"
-  }
+    justifyContent: "space-evenly",
+  },
 });
 
 export default Denied;

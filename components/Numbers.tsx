@@ -11,12 +11,12 @@ import {
   View,
 } from "react-native";
 
-const AdminScreen = () => {
+const Numbers = () => {
   return (
     <SafeAreaView>
-      <Text>THIS IS THE ADMIN SCREEN</Text>
+      <Text>THIS IS THE NUMBERS SCREEN</Text>
     </SafeAreaView>
   );
 };
 
-export default AdminScreen;
+export default Numbers;
