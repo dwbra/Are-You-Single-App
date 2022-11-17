@@ -5,15 +5,24 @@ import { dbLoad, getAdminData } from "./db/database-helpers";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import BottomBar from "./components/BottomBar";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
+import Settings from "./components/Settings";
+import Form from "./components/Form/Form";
+import Numbers from "./components/Numbers";
 
 const Stack = createNativeStackNavigator();
 const BottomNavBar = createMaterialBottomTabNavigator();
 
+<<<<<<< HEAD
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AdminScreen from "./components/AdminScreen";
 import Form from "./components/Form/Form";
+=======
+import { BottomNavigation, Text } from "react-native-paper";
+>>>>>>> cfa1615306b82b29c6d4c1acfc3a8f3d70b79841
 
 export const FormContext = createContext({});
 
@@ -46,6 +55,19 @@ const App = () => {
   useEffect(() => {
     loadDataCallback();
   }, [loadDataCallback]);
+
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: "music", title: "Music", icon: "queue-music" },
+    { key: "albums", title: "Albums", icon: "album" },
+    { key: "recents", title: "Recents", icon: "history" },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    music: Form,
+    albums: Numbers,
+    recents: Settings,
+  });
 
   return (
     <FormContext.Provider
