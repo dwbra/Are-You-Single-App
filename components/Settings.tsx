@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 
-const AdminScreen = () => {
+const Settings = () => {
   return (
     <SafeAreaView>
       <Text>THIS IS THE ADMIN SCREEN</Text>
@@ -19,4 +19,4 @@ const AdminScreen = () => {
   );
 };
 
-export default AdminScreen;
+export default Settings;

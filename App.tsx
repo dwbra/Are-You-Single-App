@@ -8,12 +8,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import AdminScreen from "./components/AdminScreen";
+import Settings from "./components/Settings";
 import Form from "./components/Form/Form";
 import Numbers from "./components/Numbers";
 
 const Stack = createNativeStackNavigator();
 const BottomNavBar = createMaterialBottomTabNavigator();
+
+import { BottomNavigation, Text } from "react-native-paper";
 
 export const FormContext = createContext({});
 
@@ -47,6 +49,19 @@ const App = () => {
     loadDataCallback();
   }, [loadDataCallback]);
 
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: "music", title: "Music", icon: "queue-music" },
+    { key: "albums", title: "Albums", icon: "album" },
+    { key: "recents", title: "Recents", icon: "history" },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    music: Form,
+    albums: Numbers,
+    recents: Settings,
+  });
+
   return (
     <FormContext.Provider
       value={{
@@ -61,50 +76,11 @@ const App = () => {
       }}
     >
       <PaperProvider>
-        <NavigationContainer>
-          <BottomNavBar.Navigator
-            initialRouteName="Form"
-            activeColor="#6200ee"
-            inactiveColor="grey"
-            shifting={true}
-            barStyle={{ backgroundColor: "#D3D3D3" }}
-          >
-            <BottomNavBar.Screen
-              name="Form"
-              component={Form}
-              options={{
-                tabBarLabel: "Home",
-                tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="home" color={color} size={26} />
-                ),
-              }}
-            />
-            <BottomNavBar.Screen
-              name="Numbers"
-              component={Numbers}
-              options={{
-                tabBarLabel: "Numbers",
-                tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons
-                    name="cellphone"
-                    color={color}
-                    size={26}
-                  />
-                ),
-              }}
-            />
-            <BottomNavBar.Screen
-              name="Settings"
-              component={AdminScreen}
-              options={{
-                tabBarLabel: "Settings",
-                tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="cog" color={color} size={30} />
-                ),
-              }}
-            />
-          </BottomNavBar.Navigator>
-        </NavigationContainer>
+        <BottomNavigation
+          navigationState={{ index, routes }}
+          onIndexChange={setIndex}
+          renderScene={renderScene}
+        />
       </PaperProvider>
     </FormContext.Provider>
   );
