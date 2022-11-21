@@ -85,7 +85,7 @@ export const createAdmin = async (name: string, age: number) => {
             status: "adminData saved",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
           });
         },
         (_, error): boolean => {
@@ -101,7 +101,7 @@ export const createUser = async (name: string, number: number) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into userData (name, number) values (?,?)",
+        "insert or ignore into userData (name, number) values (?,?)",
         [name, number],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
@@ -109,7 +109,7 @@ export const createUser = async (name: string, number: number) => {
             status: "new user successfully created and saved",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
           });
         },
         (_, error): boolean => {
@@ -133,7 +133,7 @@ export const updateAdmin = async (id: number, name: string, age: number) => {
             status: "admin updated",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
           });
         },
         (_, error): boolean => {
@@ -157,7 +157,31 @@ export const deleteAdmin = async (id: number) => {
             status: "admin deleted",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};
+
+export const deleteAllUsers = async () => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "delete from userData",
+        [],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            status: "userData table cleared",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId,
           });
         },
         (_, error): boolean => {

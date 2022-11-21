@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Text as PaperText } from "react-native-paper";
+import { Button as PaperButton, Text as PaperText } from "react-native-paper";
+import { FormContext } from "../../App";
 
 const Denied = () => {
+  // @ts-ignore
+  const { setFormData, setActiveStepIndex } = useContext(FormContext);
+  const restartForm = () => {
+    setFormData({});
+    setActiveStepIndex(0);
+  };
   return (
     <View style={styles.container}>
       <PaperText variant="bodyLarge" style={styles.text}>
@@ -11,6 +18,9 @@ const Denied = () => {
           no stress. Take it easy!
         </>
       </PaperText>
+      <PaperButton mode="contained" onPress={restartForm}>
+        Restart
+      </PaperButton>
     </View>
   );
 };

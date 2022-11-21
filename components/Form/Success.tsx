@@ -6,7 +6,7 @@ import { createUser } from "../../db/database-helpers";
 
 const Success = () => {
   // @ts-ignore
-  const { formData } = useContext(FormContext);
+  const { formData, setFormData, setActiveStepIndex } = useContext(FormContext);
   const { name, number } = formData;
 
   const sendUserInfoToDB = useCallback(async () => {
@@ -18,11 +18,18 @@ const Success = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [name, number]);
+  }, []);
+
+  const restartForm = () => {
+    setFormData({});
+    setActiveStepIndex(0);
+  };
 
   useEffect(() => {
     sendUserInfoToDB();
   }, []);
+
+  console.log(name);
 
   return (
     <View style={styles.container}>
@@ -32,25 +39,28 @@ const Success = () => {
           can go from there. Take it easy!
         </>
       </PaperText>
+      <PaperButton mode="contained" onPress={restartForm}>
+        Restart
+      </PaperButton>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   text: {
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
   },
   container: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   buttonFlex: {
     width: Dimensions.get("window").width - 50,
     marginTop: 15,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-evenly"
-  }
+    justifyContent: "space-evenly",
+  },
 });
 
 export default Success;

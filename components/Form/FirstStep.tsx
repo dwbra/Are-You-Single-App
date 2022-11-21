@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TextInput,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FormContext } from "../../App";
@@ -23,13 +23,13 @@ const FirstStep = () => {
     // @ts-ignore
     setFormData,
     // @ts-ignore
-    adminDataStore
+    adminDataStore,
   } = useContext(FormContext);
 
   const adminName = adminDataStore[0]?.name;
 
   const ValidationSchema = yup.object().shape({
-    name: yup.string().required()
+    name: yup.string().required(),
   });
 
   // @ts-ignore
@@ -42,7 +42,7 @@ const FirstStep = () => {
   return (
     <Formik
       initialValues={{
-        name: ""
+        name: "",
       }}
       validationSchema={ValidationSchema}
       onSubmit={(values) => {
@@ -57,7 +57,7 @@ const FirstStep = () => {
         handleSubmit,
         values,
         touched,
-        errors
+        errors,
       }) => (
         <View style={styles.container}>
           <PaperText variant="bodyLarge" style={styles.text}>
@@ -85,18 +85,18 @@ const FirstStep = () => {
 
 const styles = StyleSheet.create({
   text: {
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
   },
   errorContainer: {
     marginTop: 15,
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
   },
   errorText: {
-    color: "red"
+    color: "red",
   },
   container: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   input: {
     marginVertical: 10,
@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5
-  }
+    borderRadius: 5,
+  },
 });
 
 export default FirstStep;

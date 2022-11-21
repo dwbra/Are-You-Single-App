@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import {
   Button,
   SafeAreaView,
@@ -9,14 +9,77 @@ import {
   TextInput,
   useColorScheme,
   View,
+  Dimensions,
 } from "react-native";
+import { FormContext } from "../App";
+import { getUserData, deleteAllUsers } from "../db/database-helpers";
+import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 
 const Numbers = () => {
+  // @ts-ignore
+  const { userDataStore, setUserDataStore } = useContext(FormContext);
+
+  const getUserInfo = useCallback(async () => {
+    try {
+      const userData: {} = (await getUserData()) as {};
+      // @ts-ignore
+      if (userData.length) {
+        setUserDataStore(
+          // @ts-ignore
+          [...userDataStore, ...userData._array]
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [userDataStore]);
+
+  const deleteAllNumbers = async () => {
+    try {
+      const deleted = await deleteAllUsers();
+      // @ts-ignore
+
+      console.log(deleted.status);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  console.log(userDataStore);
+
   return (
     <SafeAreaView>
-      <Text>THIS IS THE NUMBERS SCREEN</Text>
+      <View style={styles.container}>
+        {userDataStore.map((user: any, index: number) => (
+          <Text key={index} style={styles.text}>
+            {user.name}
+          </Text>
+        ))}
+      </View>
+      <PaperButton
+        mode="contained"
+        style={styles.deleteButton}
+        onPress={deleteAllNumbers}
+      >
+        Delete All Data Collected
+      </PaperButton>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: Dimensions.get("window").width - 50,
+  },
+  text: {
+    color: "black",
+    fontSize: 16,
+  },
+  deleteButton: {},
+});
 
 export default Numbers;
