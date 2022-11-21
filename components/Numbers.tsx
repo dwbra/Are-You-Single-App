@@ -17,28 +17,29 @@ import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 
 const Numbers = () => {
   // @ts-ignore
-  const { userDataStore, setUserDataStore } = useContext(FormContext);
+  const { userDataStore, setUserDataStore, activeStepIndex } =
+    useContext(FormContext);
 
-  const getUserInfo = useCallback(async () => {
+  const getUserInfo = async () => {
     try {
       const userData: {} = (await getUserData()) as {};
       // @ts-ignore
       if (userData.length) {
         setUserDataStore(
           // @ts-ignore
-          [...userDataStore, ...userData._array]
+          [...userData._array]
         );
       }
     } catch (error) {
       console.error(error);
     }
-  }, [userDataStore]);
+  };
 
   const deleteAllNumbers = async () => {
     try {
       const deleted = await deleteAllUsers();
+      setUserDataStore([]);
       // @ts-ignore
-
       console.log(deleted.status);
     } catch (error) {
       console.error(error);
@@ -47,9 +48,10 @@ const Numbers = () => {
 
   useEffect(() => {
     getUserInfo();
-  }, []);
+  }, [activeStepIndex]);
 
-  console.log(userDataStore);
+  // console.log(activeStepIndex);
+  // console.log(userDataStore);
 
   return (
     <SafeAreaView>
