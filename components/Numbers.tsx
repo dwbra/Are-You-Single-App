@@ -51,28 +51,32 @@ const Numbers = () => {
   }, [activeStepIndex]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        {userDataStore.map((user: any, index: number) => {
-          return (
-            <>
-              <PaperText variant="headlineLarge" style={styles.title}>
-                Previous Contacts
-              </PaperText>
-              <View style={styles.dataTable} key={index++}>
-                <Text style={styles.userData}>{user.name}</Text>
-                <Text style={styles.userData}>{user.number}</Text>
-              </View>
-            </>
-          );
-        })}
-      </View>
-      <View style={styles.buttonContainer}>
-        <PaperButton mode="contained" onPress={deleteAllNumbers}>
-          Delete All Data Collected
-        </PaperButton>
-      </View>
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollViwContainer}>
+          <View>
+            <PaperText variant="headlineLarge" style={styles.title}>
+              Previous Contacts
+            </PaperText>
+            {userDataStore.map((user: any, index: number) => {
+              return (
+                <>
+                  <View style={styles.dataTable} key={index++}>
+                    <Text style={styles.userData}>{user.name}</Text>
+                    <Text style={styles.userData}>{user.number}</Text>
+                  </View>
+                </>
+              );
+            })}
+          </View>
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <PaperButton mode="contained" onPress={deleteAllNumbers}>
+            Delete All Data Collected
+          </PaperButton>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -98,10 +102,14 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
+    flexWrap: "wrap",
   },
   title: {
     textAlign: "center",
     marginTop: 10,
+  },
+  scrollViwContainer: {
+    marginBottom: 100,
   },
 });
 
