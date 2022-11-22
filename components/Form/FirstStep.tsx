@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     marginTop: 15,
     width: Dimensions.get("window").width - 50,
+    alignItems: "center",
   },
   errorText: {
     color: "red",

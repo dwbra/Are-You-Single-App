@@ -50,38 +50,59 @@ const Numbers = () => {
     getUserInfo();
   }, [activeStepIndex]);
 
-  // console.log(activeStepIndex);
-  // console.log(userDataStore);
-
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        {userDataStore.map((user: any, index: number) => (
-          <Text key={index} style={styles.text}>
-            {user.name}
-          </Text>
-        ))}
+    <SafeAreaView style={styles.container}>
+      <View>
+        {userDataStore.map((user: any, index: number) => {
+          return (
+            <>
+              <PaperText variant="headlineLarge" style={styles.title}>
+                Previous Contacts
+              </PaperText>
+              <View style={styles.dataTable} key={index++}>
+                <Text style={styles.userData}>{user.name}</Text>
+                <Text style={styles.userData}>{user.number}</Text>
+              </View>
+            </>
+          );
+        })}
       </View>
-      <PaperButton
-        mode="contained"
-        style={styles.deleteButton}
-        onPress={deleteAllNumbers}
-      >
-        Delete All Data Collected
-      </PaperButton>
+      <View style={styles.buttonContainer}>
+        <PaperButton mode="contained" onPress={deleteAllNumbers}>
+          Delete All Data Collected
+        </PaperButton>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get("window").width - 50,
+    height: "100%",
+    position: "relative",
   },
-  text: {
+  userData: {
     color: "black",
-    fontSize: 16,
+    fontSize: 18,
   },
-  deleteButton: {},
+  buttonContainer: {
+    position: "absolute",
+    bottom: 20,
+    alignSelf: "center",
+  },
+  dataTable: {
+    marginTop: 20,
+    width: Dimensions.get("window").width - 50,
+    marginLeft: "auto",
+    marginRight: "auto",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  title: {
+    textAlign: "center",
+    marginTop: 10,
+  },
 });
 
 export default Numbers;
