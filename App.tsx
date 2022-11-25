@@ -13,6 +13,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Settings from "./components/Settings";
 import Form from "./components/Form/Form";
 import Numbers from "./components/Numbers";
+import { dropTable, createAdmin } from "./db/database-helpers";
 
 export const FormContext = createContext({});
 
@@ -30,10 +31,8 @@ const App = () => {
       // @ts-ignore
       if (adminData.length) {
         setAdminDataStore(
-          //concating new arrays into the adminDataStore using spread operator
-          // using three dot spread on the data object to destructure the objects
           // @ts-ignore
-          [...adminDataStore, ...adminData._array]
+          { ...adminData._array }
         );
       }
     } catch (error) {
@@ -44,7 +43,11 @@ const App = () => {
   //on app startup create db tables if required and then grab admin data
   useEffect(() => {
     loadDataCallback();
-  }, [loadDataCallback]);
+  }, []);
+
+  // createAdmin("Daniel", 30, "Software Developer");
+
+  // dropTable("adminData");
 
   return (
     <FormContext.Provider

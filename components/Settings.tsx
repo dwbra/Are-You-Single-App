@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Button,
   SafeAreaView,
@@ -13,11 +13,18 @@ import {
 } from "react-native";
 import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 import { Formik, Field, Form, FormikHelpers } from "formik";
-import { updateAdmin, createAdmin } from "../db/database-helpers";
+import { updateAdmin, createAdmin, getAdminData } from "../db/database-helpers";
 import * as yup from "yup";
-import { number } from "yup/lib/locale";
+import { FormContext } from "../App";
 
 const Settings = () => {
+  const {
+    // @ts-ignore
+    adminDataStore,
+    // @ts-ignore
+    setAdminDataStore,
+  } = useContext(FormContext);
+
   const ValidationSchema = yup.object().shape({
     name: yup.string().required(),
     age: yup.string().required(),
@@ -31,54 +38,48 @@ const Settings = () => {
     </View>
   );
 
-  interface FormTypes {
-    [key: string]: any;
-    name: string;
-    age: string;
-    job: string;
-  }
+  const { name, age, job, id } = adminDataStore;
+  const ageInt = parseInt(age);
+  // console.log(ageInt);
 
-  // @ts-ignore
-  const [adminFormData, setAdminFormData] = useState<FormTypes>({});
-  const { name, age, job, id } = adminFormData;
+  // useEffect(() => {
+  //   const adminData = getAdminData();
+  //   console.log(adminData);
+  // }, [adminDataStore]);
 
-  const handleSubmit = () => {
-    if (adminFormData.length) {
-      updateAdmin();
+  const updateAdminDatabase = () => {
+    if (adminDataStore.length > 0) {
+      updateAdminDB();
     } else {
-      createAdmin();
+      createAdminDB();
     }
   };
 
-  const updateAdmin = async () => {
+  const updateAdminDB = async () => {
     try {
-      const result = await updateAdmin(id, name, age, job);
       // @ts-ignore
-      if (adminFormData.length) {
-        setAdminFormData(
-          // @ts-ignore
-          [...result._array]
-        );
+      if (adminDataStore.length > 0) {
+        const result = await updateAdmin(id, name, ageInt, job);
+        console.log(result);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const createAdmin = async () => {
+  const createAdminDB = async () => {
     try {
-      const result = await createAdmin(name, age, job);
       // @ts-ignore
-      if (adminFormData.length) {
-        setAdminFormData(
-          // @ts-ignore
-          [...result._array]
-        );
+      if (adminDataStore.length > 0) {
+        const result = await createAdmin(name, ageInt, job);
+        console.log(result);
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  console.log(adminDataStore);
 
   return (
     <>
@@ -97,9 +98,8 @@ const Settings = () => {
             }}
             validationSchema={ValidationSchema}
             onSubmit={(values) => {
-              // const data = { ...formData, ...values };
-              // setFormData(data);
-              // setActiveStepIndex(activeStepIndex + 1);
+              updateAdminDatabase();
+              setAdminDataStore([{ ...values }]);
             }}
           >
             {({
@@ -110,49 +110,53 @@ const Settings = () => {
               touched,
               errors,
             }) => (
-              <View style={styles.formStyling}>
-                <PaperText>Name</PaperText>
-                <TextInput
-                  style={styles.input}
-                  placeholder={
-                    adminFormData.name ? adminFormData.name : "your name"
-                  }
-                  onChangeText={handleChange("name")}
-                  onBlur={handleBlur("name")}
-                  value={values.name}
-                />
-                <PaperText>Age</PaperText>
-                <TextInput
-                  style={styles.input}
-                  placeholder={
-                    adminFormData.age ? adminFormData.age : "your age"
-                  }
-                  onChangeText={handleChange("age")}
-                  onBlur={handleBlur("age")}
-                  value={values.age}
-                />
-                <PaperText>Job</PaperText>
-                <TextInput
-                  style={styles.input}
-                  placeholder={
-                    adminFormData.job ? adminFormData.job : "your job"
-                  }
-                  onChangeText={handleChange("job")}
-                  onBlur={handleBlur("job")}
-                  value={values.job}
-                />
-                <ErrorMessage errorValue={touched.name && errors.name} />
-                <ErrorMessage errorValue={touched.age && errors.age} />
-                <ErrorMessage errorValue={touched.job && errors.job} />
+              <View style={styles.formContainer}>
+                <View style={styles.formStyling}>
+                  <PaperText>Name</PaperText>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={
+                      adminDataStore.name ? adminDataStore.name : "your name"
+                    }
+                    onChangeText={handleChange("name")}
+                    onBlur={handleBlur("name")}
+                    value={values.name}
+                  />
+                  <PaperText>Age</PaperText>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={
+                      adminDataStore.age ? adminDataStore.age : "your age"
+                    }
+                    onChangeText={handleChange("age")}
+                    onBlur={handleBlur("age")}
+                    value={values.age}
+                  />
+                  <PaperText>Job</PaperText>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={
+                      adminDataStore.job ? adminDataStore.job : "your job"
+                    }
+                    onChangeText={handleChange("job")}
+                    onBlur={handleBlur("job")}
+                    value={values.job}
+                  />
+                  <ErrorMessage errorValue={touched.name && errors.name} />
+                  <ErrorMessage errorValue={touched.age && errors.age} />
+                  <ErrorMessage errorValue={touched.job && errors.job} />
+                </View>
+                <View style={styles.buttonContainer}>
+                  <PaperButton mode="contained" onPress={handleSubmit}>
+                    {!!adminDataStore
+                      ? "Update your details"
+                      : "Save your details"}
+                  </PaperButton>
+                </View>
               </View>
             )}
           </Formik>
         </ScrollView>
-        <View style={styles.buttonContainer}>
-          <PaperButton mode="contained" onPress={handleSubmit}>
-            {adminFormData ? "Update your details" : "Save your details"}
-          </PaperButton>
-        </View>
       </SafeAreaView>
     </>
   );
@@ -163,9 +167,14 @@ const styles = StyleSheet.create({
     height: "100%",
     position: "relative",
   },
+  formContainer: {
+    position: "relative",
+    height: "100%",
+  },
   formStyling: {
     marginLeft: "auto",
     marginRight: "auto",
+    height: "100%",
   },
   userData: {
     color: "black",
@@ -173,7 +182,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 20,
+    bottom: -100,
     alignSelf: "center",
   },
   dataTable: {
