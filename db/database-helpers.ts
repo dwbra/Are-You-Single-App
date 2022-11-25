@@ -7,7 +7,7 @@ const db = SQLite.openDatabase("aysa");
 export const dbLoad = async () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "create table if not exists adminData (id integer primary key autoincrement, name text not null, age int not null);",
+      "create table if not exists adminData (id integer primary key autoincrement, name text not null, age text not null, job text not null);",
       null!,
       (_, results) => {
         const { insertId, rows, rowsAffected } = results;
@@ -73,12 +73,12 @@ export const getUserData = async () => {
   });
 };
 
-export const createAdmin = async (name: string, age: number) => {
+export const createAdmin = async (name: string, age: number, job: string) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into adminData (name, age) values (?,?)",
-        [name, age],
+        "insert into adminData (name, age, job) values (?,?,?)",
+        [name, age, job],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
           resolve({
@@ -121,12 +121,17 @@ export const createUser = async (name: string, number: number) => {
   });
 };
 
-export const updateAdmin = async (id: number, name: string, age: number) => {
+export const updateAdmin = async (
+  id: number,
+  name: string,
+  age: number,
+  job: string
+) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "update adminData set name = ?, age = ? where id = ?",
-        [name, age, id],
+        "update adminData set name = ?, age = ?, job = ? where id = ?",
+        [name, age, job, id],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
           resolve({

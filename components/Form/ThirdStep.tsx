@@ -27,7 +27,7 @@ const ThirdStep = () => {
   } = useContext(FormContext);
 
   const ValidationSchema = yup.object().shape({
-    number: yup.number().required(),
+    number: yup.number().min(10).required(),
   });
 
   // @ts-ignore
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     marginTop: 15,
     width: Dimensions.get("window").width - 50,
+    alignItems: "center",
   },
   errorText: {
     color: "red",
