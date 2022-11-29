@@ -36,6 +36,10 @@ const App = () => {
       // @ts-ignore
       if (adminData.length) {
         setdoesAdminExist(true);
+        // @ts-ignore
+        // console.log(adminData._array[0]);
+        // @ts-ignore
+        setAdminDataStore(adminData._array);
       }
     } catch (error) {
       console.error(error);
@@ -48,7 +52,6 @@ const App = () => {
   }, []);
 
   // createAdmin("Daniel", 30, "Software Developer");
-
   // dropTable("adminData");
 
   return (

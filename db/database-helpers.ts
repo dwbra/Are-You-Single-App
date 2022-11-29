@@ -77,7 +77,7 @@ export const createAdmin = async (name: string, age: number, job: string) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into adminData (name, age, job) values (?,?,?)",
+        "insert or ignore into adminData (name, age, job) values (?,?,?)",
         [name, age, job],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;

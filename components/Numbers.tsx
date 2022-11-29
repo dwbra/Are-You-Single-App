@@ -60,12 +60,10 @@ const Numbers = () => {
             </PaperText>
             {userDataStore.map((user: any, index: number) => {
               return (
-                <>
-                  <View style={styles.dataTable} key={index++}>
-                    <Text style={styles.userData}>{user.name}</Text>
-                    <Text style={styles.userData}>{user.number}</Text>
-                  </View>
-                </>
+                <View style={styles.dataTable} key={user.id}>
+                  <Text style={styles.userData}>{user.name}</Text>
+                  <Text style={styles.userData}>{user.number}</Text>
+                </View>
               );
             })}
           </View>

@@ -29,7 +29,7 @@ const Settings = () => {
 
   const ValidationSchema = yup.object().shape({
     name: yup.string().required(),
-    age: yup.string().required(),
+    age: yup.number().required(),
     job: yup.string().required(),
   });
 
@@ -40,17 +40,13 @@ const Settings = () => {
     </View>
   );
 
-  const { name, age, job, id } = adminDataStore;
-  // const ageInt = parseInt(age);
-  // console.log(ageInt);
+  const { name, age, job, id } = adminDataStore[0] || {};
 
   // useEffect(() => {
-  //   const adminData = getAdminData();
-  //   console.log(adminData);
+  //   updateAdminDatabase();
   // }, [adminDataStore]);
 
   const updateAdminDatabase = () => {
-    console.log("DB UPDATE ADMIN FLUNCLTOO: FIRING")
     if (adminDataStore.length > 0 && doesAdminExist === false) {
       createAdminDB();
     } else {
@@ -82,14 +78,7 @@ const Settings = () => {
     }
   };
 
-  console.log(
-    "Settings component - adminDataStore useContext useState: " +
-      JSON.stringify(adminDataStore)
-  );
-
-  useEffect(() => {
-    updateAdminDatabase();
-  }, [adminDataStore]);
+  console.log(adminDataStore);
 
   return (
     <>
@@ -124,9 +113,7 @@ const Settings = () => {
                   <PaperText>Name</PaperText>
                   <TextInput
                     style={styles.input}
-                    placeholder={
-                      adminDataStore.name ? adminDataStore.name : "your name"
-                    }
+                    // placeholder={name ? name : "your name"}
                     onChangeText={handleChange("name")}
                     onBlur={handleBlur("name")}
                     value={values.name}
@@ -134,9 +121,7 @@ const Settings = () => {
                   <PaperText>Age</PaperText>
                   <TextInput
                     style={styles.input}
-                    placeholder={
-                      adminDataStore.age ? adminDataStore.age : "your age"
-                    }
+                    // placeholder={age ? age : "your age"}
                     onChangeText={handleChange("age")}
                     onBlur={handleBlur("age")}
                     keyboardType="numeric"
@@ -146,9 +131,7 @@ const Settings = () => {
                   <PaperText>Job</PaperText>
                   <TextInput
                     style={styles.input}
-                    placeholder={
-                      adminDataStore.job ? adminDataStore.job : "your job"
-                    }
+                    // placeholder={job ? job : "your job"}
                     onChangeText={handleChange("job")}
                     onBlur={handleBlur("job")}
                     value={values.job}
@@ -159,7 +142,7 @@ const Settings = () => {
                 </View>
                 <View style={styles.buttonContainer}>
                   <PaperButton mode="contained" onPress={handleSubmit}>
-                    {!!adminDataStore
+                    {adminDataStore.length
                       ? "Update your details"
                       : "Save your details"}
                   </PaperButton>
