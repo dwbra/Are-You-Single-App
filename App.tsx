@@ -23,17 +23,19 @@ const App = () => {
 
   const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
   const [userDataStore, setUserDataStore] = useState<[] | any>([]);
+  const [doesAdminExist, setdoesAdminExist] = useState(false);
 
   const loadDataCallback = useCallback(async () => {
     try {
       await dbLoad();
       const adminData: {} = (await getAdminData()) as {};
+      console.log(
+        "initial DB load with callback function: " + JSON.stringify(adminData)
+      );
+
       // @ts-ignore
       if (adminData.length) {
-        setAdminDataStore(
-          // @ts-ignore
-          { ...adminData._array }
-        );
+        setdoesAdminExist(true);
       }
     } catch (error) {
       console.error(error);
@@ -60,6 +62,7 @@ const App = () => {
         setAdminDataStore,
         userDataStore,
         setUserDataStore,
+        doesAdminExist,
       }}
     >
       <PaperProvider>

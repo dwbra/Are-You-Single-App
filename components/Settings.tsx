@@ -23,6 +23,8 @@ const Settings = () => {
     adminDataStore,
     // @ts-ignore
     setAdminDataStore,
+    // @ts-ignore
+    doesAdminExist,
   } = useContext(FormContext);
 
   const ValidationSchema = yup.object().shape({
@@ -39,7 +41,7 @@ const Settings = () => {
   );
 
   const { name, age, job, id } = adminDataStore;
-  const ageInt = parseInt(age);
+  // const ageInt = parseInt(age);
   // console.log(ageInt);
 
   // useEffect(() => {
@@ -48,10 +50,11 @@ const Settings = () => {
   // }, [adminDataStore]);
 
   const updateAdminDatabase = () => {
-    if (adminDataStore.length > 0) {
-      updateAdminDB();
-    } else {
+    console.log("DB UPDATE ADMIN FLUNCLTOO: FIRING")
+    if (adminDataStore.length > 0 && doesAdminExist === false) {
       createAdminDB();
+    } else {
+      updateAdminDB();
     }
   };
 
@@ -59,7 +62,7 @@ const Settings = () => {
     try {
       // @ts-ignore
       if (adminDataStore.length > 0) {
-        const result = await updateAdmin(id, name, ageInt, job);
+        const result = await updateAdmin(id, name, age, job);
         console.log(result);
       }
     } catch (error) {
@@ -71,7 +74,7 @@ const Settings = () => {
     try {
       // @ts-ignore
       if (adminDataStore.length > 0) {
-        const result = await createAdmin(name, ageInt, job);
+        const result = await createAdmin(name, age, job);
         console.log(result);
       }
     } catch (error) {
@@ -79,7 +82,14 @@ const Settings = () => {
     }
   };
 
-  console.log(adminDataStore);
+  console.log(
+    "Settings component - adminDataStore useContext useState: " +
+      JSON.stringify(adminDataStore)
+  );
+
+  useEffect(() => {
+    updateAdminDatabase();
+  }, [adminDataStore]);
 
   return (
     <>
@@ -93,12 +103,11 @@ const Settings = () => {
           <Formik
             initialValues={{
               name: "",
-              age: "",
+              age: 0,
               job: "",
             }}
             validationSchema={ValidationSchema}
             onSubmit={(values) => {
-              updateAdminDatabase();
               setAdminDataStore([{ ...values }]);
             }}
           >
@@ -130,6 +139,8 @@ const Settings = () => {
                     }
                     onChangeText={handleChange("age")}
                     onBlur={handleBlur("age")}
+                    keyboardType="numeric"
+                    // @ts-ignore
                     value={values.age}
                   />
                   <PaperText>Job</PaperText>
