@@ -25,41 +25,15 @@ const App = () => {
   const [userDataStore, setUserDataStore] = useState<[] | any>([]);
   const [doesAdminExist, setdoesAdminExist] = useState(false);
 
-  // const loadDataCallback = useCallback(async () => {
-  //   try {
-  //     await dbLoad();
-  //     const adminData: {} = (await getAdminData()) as {};
-  //     console.log(
-  //       "initial DB load with callback function: " + JSON.stringify(adminData)
-  //     );
-
-  //     const updatedAdmin = await updateAdmin(1, "Dan", 31, "Frontend Dev");
-  //     console.log(JSON.stringify(updatedAdmin));
-
-  //     // @ts-ignore
-  //     if (adminData.length) {
-  //       setdoesAdminExist(true);
-  //       // @ts-ignore
-  //       setAdminDataStore(adminData._array);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }, []);
-
   const loadDB = async () => {
     try {
       await dbLoad();
       const adminData: {} = (await getAdminData()) as {};
       console.log(
-        "initial DB load with callback function: " + JSON.stringify(adminData)
+        "initial DB load with adminData: " + JSON.stringify(adminData)
       );
 
-      // const updatedAdmin = await updateAdmin(1, "Dan", 32, "Frontend Dev");
-      // console.log(JSON.stringify(updatedAdmin));
-
-      // @ts-ignore
-      if (adminData.length) {
+      if (Object.keys(adminData).length) {
         setdoesAdminExist(true);
         // @ts-ignore
         setAdminDataStore(adminData._array);
@@ -71,11 +45,10 @@ const App = () => {
 
   //on app startup create db tables if required and then grab admin data
   useEffect(() => {
-    // loadDataCallback();
     loadDB();
   }, []);
 
-  // createAdmin("Daniel", 30, "Software Developer");
+  //for demonstration purposes and dev, use function below to drop tables
   // dropTable("userData");
 
   return (
