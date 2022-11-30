@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useCallback } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { Text as PaperText } from "react-native-paper";
+import { Button as PaperButton, Text as PaperText } from "react-native-paper";
 import { FormContext } from "../../App";
 import { createUser } from "../../db/database-helpers";
 
 const Success = () => {
   // @ts-ignore
-  const { formData } = useContext(FormContext);
+  const { formData, setFormData, setActiveStepIndex } = useContext(FormContext);
   const { name, number } = formData;
 
-  const sendUserInfoToDB = useCallback(async () => {
+  const sendUserInfoToDB = async () => {
     try {
       if (Object.keys(formData).length) {
         const newUser: {} = (await createUser(name, number)) as {};
@@ -18,7 +18,12 @@ const Success = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [name, number]);
+  };
+
+  const restartForm = () => {
+    setFormData({});
+    setActiveStepIndex(0);
+  };
 
   useEffect(() => {
     sendUserInfoToDB();
@@ -32,25 +37,28 @@ const Success = () => {
           can go from there. Take it easy!
         </>
       </PaperText>
+      <PaperButton mode="contained" onPress={restartForm}>
+        Restart
+      </PaperButton>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   text: {
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
   },
   container: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   buttonFlex: {
     width: Dimensions.get("window").width - 50,
     marginTop: 15,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-evenly"
-  }
+    justifyContent: "space-evenly",
+  },
 });
 
 export default Success;

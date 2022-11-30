@@ -1,13 +1,13 @@
 import * as SQLite from "expo-sqlite";
 
-console.log("FUCKING DATABASE HELPERS ARE LOADING CUNT!");
+console.log("DATABASE HELPERS ARE LOADING!");
 
 const db = SQLite.openDatabase("aysa");
 
 export const dbLoad = async () => {
   db.transaction((tx) => {
     tx.executeSql(
-      "create table if not exists adminData (id integer primary key autoincrement, name text not null, age int not null);",
+      "create table if not exists adminData (id integer primary key autoincrement, name text not null, age int not null, job text not null);",
       null!,
       (_, results) => {
         const { insertId, rows, rowsAffected } = results;
@@ -21,7 +21,8 @@ export const dbLoad = async () => {
   });
   db.transaction((tx) => {
     tx.executeSql(
-      "create table if not exists userData (id integer primary key autoincrement, name text not null, number int not null);",
+      //have to store numbers as strings to prevent loosing the 0's
+      "create table if not exists userData (id integer primary key autoincrement, name text not null, number text not null);",
       null!,
       (_, results) => {
         const { insertId, rows, rowsAffected } = results;
@@ -73,19 +74,19 @@ export const getUserData = async () => {
   });
 };
 
-export const createAdmin = async (name: string, age: number) => {
+export const createAdmin = async (name: string, age: number, job: string) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into adminData (name, age) values (?,?)",
-        [name, age],
+        "insert or ignore into adminData (name, age, job) values (?,?,?)",
+        [name, age, job],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
           resolve({
-            status: "adminData saved",
+            message: "admin user created. This is createAdmin function.",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
           });
         },
         (_, error): boolean => {
@@ -97,43 +98,48 @@ export const createAdmin = async (name: string, age: number) => {
   });
 };
 
-export const createUser = async (name: string, number: number) => {
+export const updateAdmin = async (
+  id: number,
+  name: string,
+  age: number,
+  job: string
+) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into userData (name, number) values (?,?)",
+        "update adminData set name = ?, age = ?, job = ? where id = ?",
+        [name, age, job, id],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            message: "admin updated",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId,
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};
+
+export const createUser = async (name: string, number: string) => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert or ignore into userData (name, number) values (?,?)",
         [name, number],
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
           resolve({
-            status: "new user successfully created and saved",
+            message: "new user successfully created and saved",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
-          });
-        },
-        (_, error): boolean => {
-          console.warn(error);
-          return false;
-        }
-      );
-    });
-  });
-};
-
-export const updateAdmin = async (id: number, name: string, age: number) => {
-  return new Promise((resolve) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "update adminData set name = ?, age = ? where id = ?",
-        [name, age, id],
-        (_, results) => {
-          const { insertId, rows, rowsAffected } = results;
-          resolve({
-            status: "admin updated",
-            data: rows,
-            rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
           });
         },
         (_, error): boolean => {
@@ -154,10 +160,59 @@ export const deleteAdmin = async (id: number) => {
         (_, results) => {
           const { insertId, rows, rowsAffected } = results;
           resolve({
-            status: "admin deleted",
+            message: "admin deleted",
             data: rows,
             rowsAffected: rowsAffected,
-            insertId: insertId
+            insertId: insertId,
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};
+
+export const deleteAllUsers = async () => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "delete from userData",
+        [],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            message: "userData table cleared",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId,
+          });
+        },
+        (_, error): boolean => {
+          console.warn(error);
+          return false;
+        }
+      );
+    });
+  });
+};
+
+//function only available for developers to drop a table for dev purposes.
+export const dropTable = async (tableName: string) => {
+  return new Promise((resolve) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `drop table ${tableName}`,
+        [],
+        (_, results) => {
+          const { insertId, rows, rowsAffected } = results;
+          resolve({
+            message: "table dropped",
+            data: rows,
+            rowsAffected: rowsAffected,
+            insertId: insertId,
           });
         },
         (_, error): boolean => {

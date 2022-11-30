@@ -1,16 +1,7 @@
 import React, { useContext } from "react";
 import { FormContext } from "../../App";
-import {
-  Button,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  useColorScheme,
-  View
-} from "react-native";
+import { SafeAreaView } from "react-native";
+import Stepper from "../Stepper";
 
 import FirstStep from "./FirstStep";
 import SecondStep from "./SecondStep";
@@ -42,7 +33,12 @@ function Form() {
       break;
   }
 
-  return <SafeAreaView>{stepContent}</SafeAreaView>;
+  return (
+    <SafeAreaView>
+      <Stepper />
+      {stepContent}
+    </SafeAreaView>
+  );
 }
 
 export default Form;

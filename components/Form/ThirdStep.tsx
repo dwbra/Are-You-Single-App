@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TextInput,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FormContext } from "../../App";
@@ -23,11 +23,14 @@ const ThirdStep = () => {
     // @ts-ignore
     setFormData,
     // @ts-ignore
-    adminDataStore
+    adminDataStore,
   } = useContext(FormContext);
 
   const ValidationSchema = yup.object().shape({
-    number: yup.number().required()
+    number: yup
+      .string()
+      .matches(/^[0-9]*$/gi, "Please only enter digits between 0-9")
+      .required(),
   });
 
   // @ts-ignore
@@ -40,10 +43,10 @@ const ThirdStep = () => {
   return (
     <Formik
       initialValues={{
-        number: 0
+        number: 0,
       }}
       validationSchema={ValidationSchema}
-      onSubmit={(values) => {
+      onSubmit={(values, { resetForm }) => {
         const data = { ...formData, ...values };
         setFormData(data);
         setActiveStepIndex(69);
@@ -55,7 +58,7 @@ const ThirdStep = () => {
         handleSubmit,
         values,
         touched,
-        errors
+        errors,
       }) => (
         <View style={styles.container}>
           <PaperText variant="bodyLarge" style={styles.text}>
@@ -83,18 +86,19 @@ const ThirdStep = () => {
 
 const styles = StyleSheet.create({
   text: {
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
   },
   errorContainer: {
     marginTop: 15,
-    width: Dimensions.get("window").width - 50
+    width: Dimensions.get("window").width - 50,
+    alignItems: "center",
   },
   errorText: {
-    color: "red"
+    color: "red",
   },
   container: {
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   input: {
     marginVertical: 10,
@@ -102,8 +106,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5
-  }
+    borderRadius: 5,
+  },
 });
 
 export default ThirdStep;

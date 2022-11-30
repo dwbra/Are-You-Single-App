@@ -1,28 +1,19 @@
 import React, { useCallback, useEffect, useState, createContext } from "react";
 import { Provider as PaperProvider } from "react-native-paper";
-import {
-  Button,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  useColorScheme,
-  View
-} from "react-native";
-// import { NavigationContainer } from "@react-navigation/native";
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Form from "./components/Form/Form";
-import Stepper from "./components/Stepper";
-import {
-  dbLoad,
-  getAdminData,
-  deleteAdmin,
-  updateAdmin
-} from "./db/database-helpers";
+import { dbLoad, getAdminData } from "./db/database-helpers";
 
-// const Stack = createNativeStackNavigator()
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
+const BottomNavBar = createMaterialBottomTabNavigator();
+
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Settings from "./components/Settings";
+import Form from "./components/Form/Form";
+import Numbers from "./components/Numbers";
+import { dropTable, createAdmin, updateAdmin } from "./db/database-helpers";
 
 export const FormContext = createContext({});
 
@@ -32,31 +23,60 @@ const App = () => {
 
   const [adminDataStore, setAdminDataStore] = useState<[] | any>([]);
   const [userDataStore, setUserDataStore] = useState<[] | any>([]);
+  const [doesAdminExist, setdoesAdminExist] = useState(false);
 
-  const loadDataCallback = useCallback(async () => {
+  // const loadDataCallback = useCallback(async () => {
+  //   try {
+  //     await dbLoad();
+  //     const adminData: {} = (await getAdminData()) as {};
+  //     console.log(
+  //       "initial DB load with callback function: " + JSON.stringify(adminData)
+  //     );
+
+  //     const updatedAdmin = await updateAdmin(1, "Dan", 31, "Frontend Dev");
+  //     console.log(JSON.stringify(updatedAdmin));
+
+  //     // @ts-ignore
+  //     if (adminData.length) {
+  //       setdoesAdminExist(true);
+  //       // @ts-ignore
+  //       setAdminDataStore(adminData._array);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }, []);
+
+  const loadDB = async () => {
     try {
       await dbLoad();
       const adminData: {} = (await getAdminData()) as {};
+      console.log(
+        "initial DB load with callback function: " + JSON.stringify(adminData)
+      );
+
+      // const updatedAdmin = await updateAdmin(1, "Dan", 32, "Frontend Dev");
+      // console.log(JSON.stringify(updatedAdmin));
+
       // @ts-ignore
       if (adminData.length) {
-        setAdminDataStore(
-          //concating new arrays into the adminDataStore using spread operator
-          // using three dot spread on the data object to destructure the objects
-          // @ts-ignore
-          [...adminDataStore, ...adminData._array]
-        );
+        setdoesAdminExist(true);
+        // @ts-ignore
+        setAdminDataStore(adminData._array);
       }
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  };
 
   //on app startup create db tables if required and then grab admin data
   useEffect(() => {
-    loadDataCallback();
-  }, [loadDataCallback]);
+    // loadDataCallback();
+    loadDB();
+  }, []);
 
-  // console.log(adminDataStore);
+  // createAdmin("Daniel", 30, "Software Developer");
+  // dropTable("userData");
 
   return (
     <FormContext.Provider
@@ -68,41 +88,58 @@ const App = () => {
         adminDataStore,
         setAdminDataStore,
         userDataStore,
-        setUserDataStore
+        setUserDataStore,
+        doesAdminExist,
       }}
     >
       <PaperProvider>
-        <Stepper />
-        <Form />
+        <NavigationContainer>
+          <BottomNavBar.Navigator
+            initialRouteName="Form"
+            activeColor="#6200ee"
+            inactiveColor="grey"
+            shifting={true}
+            barStyle={{ backgroundColor: "#D3D3D3" }}
+          >
+            <BottomNavBar.Screen
+              name="Form"
+              component={Form}
+              options={{
+                tabBarLabel: "Home",
+                tabBarIcon: ({ color }) => (
+                  <MaterialCommunityIcons name="home" color={color} size={26} />
+                ),
+              }}
+            />
+            <BottomNavBar.Screen
+              name="Data"
+              component={Numbers}
+              options={{
+                tabBarLabel: "Numbers",
+                tabBarIcon: ({ color }) => (
+                  <MaterialCommunityIcons
+                    name="cellphone"
+                    color={color}
+                    size={26}
+                  />
+                ),
+              }}
+            />
+            <BottomNavBar.Screen
+              name="Settings"
+              component={Settings}
+              options={{
+                tabBarLabel: "Settings",
+                tabBarIcon: ({ color }) => (
+                  <MaterialCommunityIcons name="cog" color={color} size={30} />
+                ),
+              }}
+            />
+          </BottomNavBar.Navigator>
+        </NavigationContainer>
       </PaperProvider>
     </FormContext.Provider>
   );
 };
-// const styles = StyleSheet.create({
-//   appTitleView: {
-//     marginTop: 20,
-//     justifyContent: "center",
-//     flexDirection: "row"
-//   },
-//   appTitleText: {
-//     fontSize: 24,
-//     fontWeight: "800"
-//   },
-//   textInputContainer: {
-//     marginTop: 30,
-//     marginLeft: 20,
-//     marginRight: 20,
-//     borderRadius: 10,
-//     borderColor: "black",
-//     borderWidth: 1,
-//     justifyContent: "flex-end"
-//   },
-//   textInput: {
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     height: 30,
-//     margin: 10,
-//     backgroundColor: "pink"
-//   }
-// });
+
 export default App;
