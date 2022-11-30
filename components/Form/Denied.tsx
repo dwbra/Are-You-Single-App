@@ -18,7 +18,7 @@ const Denied = () => {
           no stress. Take it easy!
         </>
       </PaperText>
-      <PaperButton mode="contained" onPress={restartForm}>
+      <PaperButton mode="contained" style={styles.button} onPress={restartForm}>
         Restart
       </PaperButton>
     </View>
@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
+  },
+  button: {
+    marginTop: 10,
   },
 });
 

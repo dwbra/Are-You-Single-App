@@ -76,7 +76,7 @@ const App = () => {
   }, []);
 
   // createAdmin("Daniel", 30, "Software Developer");
-  // dropTable("adminData");
+  // dropTable("userData");
 
   return (
     <FormContext.Provider

@@ -29,16 +29,18 @@ const Settings = () => {
 
   const ValidationSchema = yup.object().shape({
     name: yup.string().required(),
-    age: yup.number().required(),
+    age: yup.number().positive().required(),
     job: yup.string().required(),
   });
 
   // @ts-ignore
-  const ErrorMessage = ({ errorValue }) => (
-    <View style={styles.errorContainer}>
-      <Text style={styles.errorText}>{errorValue}</Text>
-    </View>
-  );
+  const ErrorMessage = ({ errorValue }) => {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{errorValue}</Text>
+      </View>
+    );
+  };
 
   useEffect(() => {
     updateAdminDatabase();
@@ -56,12 +58,8 @@ const Settings = () => {
     try {
       // @ts-ignore
       if (adminDataStore.length > 0) {
-        // console.log("UPDATE FUNCTION FIRED");
-        // console.log(id, name, age, job);
-        // console.log(adminDataStore[0]);
-
         const result = await updateAdmin(id, name, age, job);
-        console.log(result);
+        // console.log(result);
       }
     } catch (error) {
       console.error(error);
@@ -73,21 +71,20 @@ const Settings = () => {
       // @ts-ignore
       if (adminDataStore.length > 0) {
         const result = await createAdmin(name, age, job);
-        console.log(result);
+        // console.log(result);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  // const { name, age, job, id } = adminDataStore[0] || [];
+  //ensure if no admin on initial run no undefined errors
   const { name } = adminDataStore[0] || "";
   const { age } = adminDataStore[0] || 0;
   const { job } = adminDataStore[0] || "";
   const { id } = adminDataStore[0] || 0;
-  console.log(id);
 
-  console.log(adminDataStore);
+  // console.log(adminDataStore);
 
   return (
     <>
@@ -110,6 +107,7 @@ const Settings = () => {
               if (doesAdminExist === false) {
                 setAdminDataStore([{ ...values }]);
               } else {
+                //ensure the id value is maintained in the state
                 setAdminDataStore([{ ...adminObj, ...values }]);
               }
               resetForm();
@@ -134,6 +132,7 @@ const Settings = () => {
                     onBlur={handleBlur("name")}
                     value={values.name}
                   />
+                  <ErrorMessage errorValue={touched.name && errors.name} />
                   <PaperText>Age</PaperText>
                   <TextInput
                     style={styles.input}
@@ -144,6 +143,7 @@ const Settings = () => {
                     // @ts-ignore
                     value={values.age}
                   />
+                  <ErrorMessage errorValue={touched.age && errors.age} />
                   <PaperText>Job</PaperText>
                   <TextInput
                     style={styles.input}
@@ -152,8 +152,6 @@ const Settings = () => {
                     onBlur={handleBlur("job")}
                     value={values.job}
                   />
-                  <ErrorMessage errorValue={touched.name && errors.name} />
-                  <ErrorMessage errorValue={touched.age && errors.age} />
                   <ErrorMessage errorValue={touched.job && errors.job} />
                 </View>
                 <View style={styles.buttonContainer}>
@@ -192,8 +190,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    bottom: -100,
     alignSelf: "center",
+    bottom: 0,
   },
   dataTable: {
     marginTop: 20,
@@ -213,9 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   errorContainer: {
-    marginTop: 15,
-    width: Dimensions.get("window").width - 50,
-    alignItems: "center",
+    marginBottom: 10,
   },
   errorText: {
     color: "red",

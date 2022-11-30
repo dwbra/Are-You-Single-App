@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
 
-console.log("FUCKING DATABASE HELPERS ARE LOADING CUNT!");
+console.log("DATABASE HELPERS ARE LOADING!");
 
 const db = SQLite.openDatabase("aysa");
 
@@ -21,7 +21,8 @@ export const dbLoad = async () => {
   });
   db.transaction((tx) => {
     tx.executeSql(
-      "create table if not exists userData (id integer primary key autoincrement, name text not null, number int not null);",
+      //have to store numbers as strings to prevent loosing the 0's
+      "create table if not exists userData (id integer primary key autoincrement, name text not null, number text not null);",
       null!,
       (_, results) => {
         const { insertId, rows, rowsAffected } = results;
@@ -126,7 +127,7 @@ export const updateAdmin = async (
   });
 };
 
-export const createUser = async (name: string, number: number) => {
+export const createUser = async (name: string, number: string) => {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(

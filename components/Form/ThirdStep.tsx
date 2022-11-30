@@ -27,7 +27,10 @@ const ThirdStep = () => {
   } = useContext(FormContext);
 
   const ValidationSchema = yup.object().shape({
-    number: yup.number().min(10).required(),
+    number: yup
+      .string()
+      .matches(/^[0-9]*$/gi, "Please only enter digits between 0-9")
+      .required(),
   });
 
   // @ts-ignore

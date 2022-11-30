@@ -9,7 +9,7 @@ const Success = () => {
   const { formData, setFormData, setActiveStepIndex } = useContext(FormContext);
   const { name, number } = formData;
 
-  const sendUserInfoToDB = useCallback(async () => {
+  const sendUserInfoToDB = async () => {
     try {
       if (Object.keys(formData).length) {
         const newUser: {} = (await createUser(name, number)) as {};
@@ -18,7 +18,7 @@ const Success = () => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  };
 
   const restartForm = () => {
     setFormData({});
@@ -28,8 +28,6 @@ const Success = () => {
   useEffect(() => {
     sendUserInfoToDB();
   }, []);
-
-  console.log(name);
 
   return (
     <View style={styles.container}>
