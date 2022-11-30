@@ -21,3 +21,4 @@ Choose which device setup to run. Personally I used IOS with Xcode so
 
 - https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-
 - https://stackoverflow.com/questions/66587537/how-to-use-expo-sqlite-execute-sql-with-typescript
+- https://docs.expo.dev/versions/latest/sdk/sqlite/#query
