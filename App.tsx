@@ -13,7 +13,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Settings from "./components/Settings";
 import Form from "./components/Form/Form";
 import Numbers from "./components/Numbers";
-import { dropTable, createAdmin } from "./db/database-helpers";
+import { dropTable, createAdmin, updateAdmin } from "./db/database-helpers";
 
 export const FormContext = createContext({});
 
@@ -25,7 +25,29 @@ const App = () => {
   const [userDataStore, setUserDataStore] = useState<[] | any>([]);
   const [doesAdminExist, setdoesAdminExist] = useState(false);
 
-  const loadDataCallback = useCallback(async () => {
+  // const loadDataCallback = useCallback(async () => {
+  //   try {
+  //     await dbLoad();
+  //     const adminData: {} = (await getAdminData()) as {};
+  //     console.log(
+  //       "initial DB load with callback function: " + JSON.stringify(adminData)
+  //     );
+
+  //     const updatedAdmin = await updateAdmin(1, "Dan", 31, "Frontend Dev");
+  //     console.log(JSON.stringify(updatedAdmin));
+
+  //     // @ts-ignore
+  //     if (adminData.length) {
+  //       setdoesAdminExist(true);
+  //       // @ts-ignore
+  //       setAdminDataStore(adminData._array);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }, []);
+
+  const loadDB = async () => {
     try {
       await dbLoad();
       const adminData: {} = (await getAdminData()) as {};
@@ -33,22 +55,24 @@ const App = () => {
         "initial DB load with callback function: " + JSON.stringify(adminData)
       );
 
+      // const updatedAdmin = await updateAdmin(1, "Dan", 32, "Frontend Dev");
+      // console.log(JSON.stringify(updatedAdmin));
+
       // @ts-ignore
       if (adminData.length) {
         setdoesAdminExist(true);
-        // @ts-ignore
-        // console.log(adminData._array[0]);
         // @ts-ignore
         setAdminDataStore(adminData._array);
       }
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  };
 
   //on app startup create db tables if required and then grab admin data
   useEffect(() => {
-    loadDataCallback();
+    // loadDataCallback();
+    loadDB();
   }, []);
 
   // createAdmin("Daniel", 30, "Software Developer");

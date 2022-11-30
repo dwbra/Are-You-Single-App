@@ -6,6 +6,8 @@ I came up with this idea whilst on a flight with an attractive air hostest. I wa
 
 I thought that it would be a great opportunity to build my first React Native application using Formik to create a multistep form.
 
+Originally I thought I'd do this in Typescript, but the learning curve of React Native combined with the typing required quickly proved tiresome. Therefore I have not bothered to type this project correctly.
+
 #### Build/Run steps
 
 1. npm i
@@ -19,4 +21,3 @@ Choose which device setup to run. Personally I used IOS with Xcode so
 
 - https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-
 - https://stackoverflow.com/questions/66587537/how-to-use-expo-sqlite-execute-sql-with-typescript
-- https://stackoverflow.com/questions/37435334/correct-way-to-push-into-state-array

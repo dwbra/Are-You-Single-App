@@ -26,7 +26,7 @@ const FirstStep = () => {
     adminDataStore,
   } = useContext(FormContext);
 
-  const adminName = adminDataStore[0]?.name;
+  const adminName = adminDataStore[0]?.name.trim();
 
   const ValidationSchema = yup.object().shape({
     name: yup.string().required(),

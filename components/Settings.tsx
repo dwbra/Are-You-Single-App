@@ -40,11 +40,9 @@ const Settings = () => {
     </View>
   );
 
-  const { name, age, job, id } = adminDataStore[0] || {};
-
-  // useEffect(() => {
-  //   updateAdminDatabase();
-  // }, [adminDataStore]);
+  useEffect(() => {
+    updateAdminDatabase();
+  }, [adminDataStore]);
 
   const updateAdminDatabase = () => {
     if (adminDataStore.length > 0 && doesAdminExist === false) {
@@ -58,6 +56,10 @@ const Settings = () => {
     try {
       // @ts-ignore
       if (adminDataStore.length > 0) {
+        // console.log("UPDATE FUNCTION FIRED");
+        // console.log(id, name, age, job);
+        // console.log(adminDataStore[0]);
+
         const result = await updateAdmin(id, name, age, job);
         console.log(result);
       }
@@ -78,6 +80,13 @@ const Settings = () => {
     }
   };
 
+  // const { name, age, job, id } = adminDataStore[0] || [];
+  const { name } = adminDataStore[0] || "";
+  const { age } = adminDataStore[0] || 0;
+  const { job } = adminDataStore[0] || "";
+  const { id } = adminDataStore[0] || 0;
+  console.log(id);
+
   console.log(adminDataStore);
 
   return (
@@ -96,8 +105,14 @@ const Settings = () => {
               job: "",
             }}
             validationSchema={ValidationSchema}
-            onSubmit={(values) => {
-              setAdminDataStore([{ ...values }]);
+            onSubmit={(values, { resetForm }) => {
+              const adminObj = adminDataStore[0];
+              if (doesAdminExist === false) {
+                setAdminDataStore([{ ...values }]);
+              } else {
+                setAdminDataStore([{ ...adminObj, ...values }]);
+              }
+              resetForm();
             }}
           >
             {({
@@ -107,13 +122,14 @@ const Settings = () => {
               values,
               touched,
               errors,
+              resetForm,
             }) => (
               <View style={styles.formContainer}>
                 <View style={styles.formStyling}>
                   <PaperText>Name</PaperText>
                   <TextInput
                     style={styles.input}
-                    // placeholder={name ? name : "your name"}
+                    placeholder={name ? name : "your name"}
                     onChangeText={handleChange("name")}
                     onBlur={handleBlur("name")}
                     value={values.name}
@@ -121,7 +137,7 @@ const Settings = () => {
                   <PaperText>Age</PaperText>
                   <TextInput
                     style={styles.input}
-                    // placeholder={age ? age : "your age"}
+                    placeholder={age ? age.toString() : "your age"}
                     onChangeText={handleChange("age")}
                     onBlur={handleBlur("age")}
                     keyboardType="numeric"
@@ -131,7 +147,7 @@ const Settings = () => {
                   <PaperText>Job</PaperText>
                   <TextInput
                     style={styles.input}
-                    // placeholder={job ? job : "your job"}
+                    placeholder={job ? job : "your job"}
                     onChangeText={handleChange("job")}
                     onBlur={handleBlur("job")}
                     value={values.job}
